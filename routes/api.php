@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\TaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,7 +22,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::prefix("projects")->name("projects.")->controller(ProjectController::class)->group(function () {
+    Route::get("/", "index")->name("index");
     Route::post("/", "store")->name("store");
     Route::put("/{project}", "update")->name("update");
-    Route::delete("/{project}", "destroy")->name("update");
+    Route::delete("/{project}", "destroy")->name("destroy");
+    Route::get("/{project}", "show")->name("show");
+});
+
+
+
+Route::prefix("tasks")->name("tasks.")->controller(TaskController::class)->group(function () {
+    Route::get("/", "index")->name("index");
+    Route::post("/", "store")->name("store");
+    Route::put("/{task}", "update")->name("update");
+    Route::delete("/{task}", "destroy")->name("update");
 });
