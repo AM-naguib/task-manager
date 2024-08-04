@@ -21,6 +21,7 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
+        $request["created_by"]= auth()->user()->id;
         $validator = Validator::make($request->all(), [
             "name" => "required",
             "summary" => "nullable",
@@ -28,7 +29,8 @@ class TaskController extends Controller
             "deadline" => "nullable",
             "priority" => "nullable",
             "description" => "nullable",
-            "project_id"=>"required",
+            "project_id" => "required",
+            "users" => "required|array",
             "created_by" => "required"
         ]);
         if ($validator->fails()) {
@@ -36,9 +38,16 @@ class TaskController extends Controller
         }
 
         try {
+            $data = $validator->validated();
+            unset($data["users"]);
 
-            $task = Task::create($validator->validated());
-            return response()->json(["message" => "Task created", "task" => $task], 201);
+            $task = Task::create($data);
+            $task->users()->attach($request->users);
+            return response()->json([
+            "message" => "Task created",
+            "task" => $task,
+            "users" => $request->users
+            ], 201);
         } catch (\Exception $e) {
             return response()->json(["message" => $e->getMessage()], 500);
         }
@@ -49,7 +58,10 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        return response()->json(["message" => "Success", "task" => $task], 200);
+        return response()->json([
+            "message" => "Success",
+            "task" => $task->load('users',"comments"),
+        ], 200);
     }
 
 
@@ -65,16 +77,26 @@ class TaskController extends Controller
             "deadline" => "nullable",
             "priority" => "nullable",
             "description" => "nullable",
-            "project_id"=>"required",
+            "project_id" => "required|exists:projects,id",
+            "users" => "required|array",
+            'users.*'     => 'exists:users,id'
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-
         try {
-
-            $task->update($validator->validated());
-            return response()->json(["message" => "Project Updated", "project" => $task], 201);
+            $data = $validator->validated();
+            unset($data["users"]);
+            $task->update($data);
+            $task->users()->sync($request->users);
+            return response()->json(
+                [
+                    "message" => "Task Updated",
+                    'task'    => $task->fresh(),
+                    "users" => $task->users
+                ],
+                201
+            );
         } catch (\Exception $e) {
             return response()->json(["message" => $e->getMessage()], 500);
         }
