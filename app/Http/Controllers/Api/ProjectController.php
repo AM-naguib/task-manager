@@ -15,7 +15,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return response()->json(["message" => "Success", "projects" => Project::all()], 200);
+        return response()->json(["message" => "Success", "projects" => Project::all()->load('tasks')], 200);
     }
 
 
@@ -25,6 +25,7 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+        $request["created_by"]= auth()->user()->id;
         $validator = Validator::make($request->all(), [
             "name" => "required",
             "status" => "nullable",
@@ -52,7 +53,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        return response()->json(["message" => "Success", "project" => $project, "tasks" => $project->tasks], 200);
+        return response()->json(["message" => "Success", "project" => $project->load('tasks')], 200);
     }
 
 
