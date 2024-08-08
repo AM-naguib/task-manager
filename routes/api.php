@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,4 +59,9 @@ Route::middleware("auth:sanctum")->group(function () {
         Route::delete("/{comment}", "destroy")->name("update");
         Route::get("/{comment}", "show")->name("show");
     });
+
+
+
+    Route::resource('roles', RoleController::class);
+
 });
