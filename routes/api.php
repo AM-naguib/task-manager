@@ -3,10 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\CommentController;
-use App\Http\Controllers\Api\TaskController;
-use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\TaskController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\ProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,4 +65,13 @@ Route::middleware("auth:sanctum")->group(function () {
 
     Route::resource('roles', RoleController::class);
 
+
+
+
+    Route::prefix("users")->name("users.")->controller(UserController::class)->group(function () {
+        Route::post("/", "store")->name("store");
+        Route::put("/{user}", "update")->name("update");
+        Route::get("/{user}", "show")->name("show");
+        Route::delete("/{user}", "destroy")->name("destroy");
+    });
 });
