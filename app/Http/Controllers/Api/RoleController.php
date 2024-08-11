@@ -57,25 +57,29 @@ class RoleController extends Controller
         $rolePermissions = Permission::join("role_has_permissions", "role_has_permissions.permission_id", "=", "permissions.id")
             ->where("role_has_permissions.role_id", $id)
             ->get();
-
         return response()->json(["message" => "Success", "role" => $role, "rolePermissions" => $rolePermissions], 200);
     }
 
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:roles,name',
+            'permissions' => 'required|array',
+        ]);
+        if($validator->fails()){
+            return response()->json($validator->errors(), 401);
+        }
+        $role =Role::find($id);
+        $role->name = $request->input('name');
+        $role->save();
+        $role->syncPermissions($request->input('permissions'));
+        return response()->json(['message' => 'Role updated successfully', 'role' => $role], 201);
     }
 
     /**
@@ -83,6 +87,11 @@ class RoleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try{
+            Role::find($id)->delete();
+            return response()->json(["message" => "Role Deleted"], 200);
+        }catch(\Exception $e){
+            return response()->json(["message" => $e->getMessage()], 500);
+        }
     }
 }
