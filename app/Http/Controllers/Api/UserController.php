@@ -10,51 +10,52 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    public function index(){
+    public function index()
+    {
 
         return response()->json(["users" => User::all(), "roles" => Role::all()], 200);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
-            "name"=>["required"],
-            "email"=>["required","unique:users,email","email"],
-            "username"=>["required","unique:users,username"],
-            "password"=>["required"],
-            "role_id"=>["required","exists:roles,id"],
+            "name" => ["required"],
+            "email" => ["required", "unique:users,email", "email"],
+            "username" => ["required", "unique:users,username"],
+            "password" => ["required"],
+            "role_id" => ["required", "exists:roles,id"],
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json($validator->errors(), 401);
         }
 
-        try{
+        try {
             $data = $validator->validated();
             $data["password"] = bcrypt($data["password"]);
             $user = User::create($data);
             $role = Role::find($request["role_id"]);
             $user->assignRole([$role->id]);
             return response()->json(["message" => "User Created", "user" => $user, "role" => $role], 201);
-
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json(["message" => $e->getMessage()], 500);
         }
     }
 
 
     public function show(User $user)
-{
-    $roles = $user->getRoleNames();
+    {
+        $roles = $user->getRoleNames();
+        return response()->json([
+            "user" => $user->only(['id', 'name', 'email', 'username', 'email_verified_at', 'created_at', 'updated_at']),
+            "roles" => $roles
+        ], 200);
+    }
 
-    return response()->json([
-        "user" => $user->only(['id', 'name', 'email', 'username', 'email_verified_at', 'created_at', 'updated_at']),
-        "roles" => $roles
-    ], 200);
-}
 
-
-    public function update(Request $request, User $user) {
+    public function update(Request $request, User $user)
+    {
         $validator = Validator::make($request->all(), [
             "name" => ["required"],
             "email" => "required|email|unique:users,email," . $user->id,
@@ -83,13 +84,13 @@ class UserController extends Controller
         }
     }
 
-    public function destroy(User $user){
-        try{
+    public function destroy(User $user)
+    {
+        try {
             $user->delete();
             return response()->json(["message" => "User Deleted"], 200);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json(["message" => $e->getMessage()], 500);
         }
-
     }
 }

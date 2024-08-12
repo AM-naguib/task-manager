@@ -21,4 +21,10 @@ class Task extends Model
 
         return $this->hasMany(Comment::class);
     }
+
+
+    public function project(){
+
+        return $this->belongsTo(Project::class);
+    }
 }

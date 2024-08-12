@@ -40,8 +40,9 @@ class ProjectController extends Controller
         }
 
         try {
+            $data = $validator->validated();
 
-            $project = Project::create($validator->validated());
+            $project = Project::create($data);
             return response()->json(["message" => "Project created", "project" => $project], 201);
         } catch (\Exception $e) {
             return response()->json(["message" => $e->getMessage()], 500);

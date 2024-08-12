@@ -21,6 +21,7 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $request["created_by"]= auth()->user()->id;
         $validator = Validator::make($request->all(), [
             "name" => "required",
@@ -29,7 +30,7 @@ class TaskController extends Controller
             "deadline" => "nullable",
             "priority" => "nullable",
             "description" => "nullable",
-            "project_id" => "required",
+            "project_id" => "nullable",
             "users" => "required|array",
             "created_by" => "required"
         ]);
@@ -58,9 +59,13 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
+        $taskData = $task->load('comments')->toArray(); // Convert task and its comments to an array
+
+        $taskData['user_ids'] = $task->users->pluck('id');
+
         return response()->json([
             "message" => "Success",
-            "task" => $task->load('users',"comments"),
+            "task" => $taskData,
         ], 200);
     }
 
@@ -77,7 +82,7 @@ class TaskController extends Controller
             "deadline" => "nullable",
             "priority" => "nullable",
             "description" => "nullable",
-            "project_id" => "required|exists:projects,id",
+            "project_id" => "nullable",
             "users" => "required|array",
             'users.*'     => 'exists:users,id'
         ]);

@@ -26,9 +26,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::controller(AuthController::class)->prefix("auth")->group(function () {
-    Route::post("/login", "login")->name("login");
+    Route::post("/login", "login");
     Route::post("/register", "register")->name("register");
-    Route::post("/logout", "logout")->name("logout")->middleware("auth:sanctum");
+    Route::post("/logout", "logout")->middleware("auth:sanctum");
 });
 
 
@@ -44,7 +44,7 @@ Route::middleware("auth:sanctum")->group(function () {
 
 
     Route::prefix("tasks")->name("tasks.")->controller(TaskController::class)->group(function () {
-        Route::get("/", "index")->name("index");
+        Route::get("/", "index")->name("api.index");
         Route::post("/", "store")->name("store");
         Route::put("/{task}", "update")->name("update");
         Route::delete("/{task}", "destroy")->name("update");
