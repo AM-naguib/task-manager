@@ -383,8 +383,8 @@
                     <div class="task">
                         <div class="task-head border-bottom">
                             <div class="task-title d-flex gap-1 mb-1">
-                                <h3>Task Name : </h3>
-                                <h3 id="taskName"></h3>
+                                <p class="m-0">Task Name : </p>
+                                <p class="m-0" id="taskName"></p>
                             </div>
 
                             <div class="task-project d-flex gap-1 mb-1">
@@ -492,18 +492,35 @@
                 url: `{{ route('tasks.show', '') }}/${id}`,
                 type: 'get',
                 success: function(data) {
+
                     $("#taskName").text(data.task.name || '');
+                    $("#taskTitle").text(data.task.name || '');
                     $("#projectName").text(data.task.project.name || '');
                     $("#taskStatus").text(data.task.status || '');
                     $("#taskPriority").text(data.task.priority || '');
-                    $("#taskAssign").text(data.task.user.name || '');
-                    $("#taskCreatedBy").text(data.task.user.name || '');
+                    $("#taskAssign").html(data.task.users.map(user => user.name).join(', ') || '');
+                    $("#taskCreatedBy").text(data.task.created_by.name || '');
                     $("#taskCreatedAt").text(data.task.created_at || '');
                     $("#taskDeadline").text(data.task.deadline || '');
-                    $("#taskDescription").text(data.task.description || '');
+                    $("#taskDescription").html(data.task.description || '');  // Use .html() for HTML content
                 }
             })
         }
+
+
+        const users = [
+  { id: 2, name: "halim", email: "halim@gmail.com", username: "halim", email_verified_at: null },
+  { id: 3, name: "youssef", email: "youssef@gmail.com", username: "youssef", email_verified_at: null }
+];
+
+users.forEach(user => {
+  console.log('ID:', user.id);
+  console.log('Name:', user.name);
+  console.log('Email:', user.email);
+  console.log('Username:', user.username);
+  console.log('Email Verified At:', user.email_verified_at);
+  console.log('---'); // separator for readability
+});
 
 
 
