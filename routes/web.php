@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\TaskController as TaskController;
 use Illuminate\Support\Facades\Route ;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\AuthController as AuthController;
 use App\Http\Controllers\HomeController as HomeController;
-use App\Http\Controllers\ProjectController  as ProjectController;
-use App\Http\Controllers\Api\ProjectController as ApiProjectController;
+use App\Http\Controllers\TaskController as TaskController;
 use App\Http\Controllers\Api\RoleController as ApiRoleController;
 use App\Http\Controllers\Api\TaskController as ApiTaskController;
 use App\Http\Controllers\Api\UserController as ApiUserController;
+use App\Http\Controllers\ProjectController  as ProjectController;
 use App\Http\Controllers\Api\CommentController as ApiCommentController;
+use App\Http\Controllers\Api\ProjectController as ApiProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,5 +88,15 @@ Route::middleware("auth")->group(function () {
         Route::put("/{user}", "update")->name("update");
         Route::get("/{user}", "show")->name("show");
         Route::delete("/{user}", "destroy")->name("destroy");
+    });
+
+
+    Route::prefix("documents")->controller(DocumentController::class)->name("documents.")->group(function () {
+            Route::get("/","index")->name("index");
+            Route::get("/create","create")->name("create");
+            Route::post("/","store")->name("store");
+            Route::get("/{document}/edit","edit")->name("edit");
+            Route::put("/{document}","update")->name("update");
+            Route::delete("/{document}","destroy")->name("destroy");
     });
 });

@@ -59,7 +59,7 @@
                                                 <td>{{ $task->name }}</td>
                                                 <td>{{ $task->status }}</td>
                                                 <td>{{ $task->priority }}</td>
-                                                <td>{{ $task->deadline }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($task->deadline)->format('d-m-Y') }}</td>
                                                 <td>{{ $task->project->name ?? '' }}</td>
                                                 <td>
                                                     @foreach ($task->users as $user)
