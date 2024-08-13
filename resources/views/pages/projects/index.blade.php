@@ -346,6 +346,8 @@
                     console.log('Form submitted successfully:', response);
                     $('#staticBackdrop').modal('hide');
                     $("table").load(location.href + " table ");
+                    $('#addForm')[0].reset();
+
                 },
                 error: function(xhr) {
                     console.error('Form submission error:', xhr.responseText);
@@ -366,6 +368,7 @@
                     console.log('Form updated successfully:', response);
                     $('#staticBackdrop').modal('hide');
                     $("table").load(location.href + " table ");
+                    $('#updateForm')[0].reset();
 
                 },
                 error: function(xhr) {
