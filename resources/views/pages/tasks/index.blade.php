@@ -69,10 +69,11 @@
                                                 </td>
 
                                                 <td class="d-flex  gap-2">
-                                                        <button type="button" onclick="fillShow({{ $task->id }})" class="btn btn-primary" data-toggle="modal"
-                                                            data-target="#rightModal">
-                                                            View
-                                                        </button>
+                                                    <button type="button" onclick="fillShow({{ $task->id }})"
+                                                        class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#rightModal">
+                                                        View
+                                                    </button>
                                                     {{-- <button class="btn btn-primary"
                                                         onclick="fillShow({{ $task->id }})">View</button> --}}
                                                     <a href="{{ route('tasks.edit', $task->id) }}"
@@ -487,7 +488,15 @@
             });
         }
 
-        function fillShow(id){
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}-${month}-${year}`;
+        }
+
+        function fillShow(id) {
             $.ajax({
                 url: `{{ route('tasks.show', '') }}/${id}`,
                 type: 'get',
@@ -500,27 +509,38 @@
                     $("#taskPriority").text(data.task.priority || '');
                     $("#taskAssign").html(data.task.users.map(user => user.name).join(', ') || '');
                     $("#taskCreatedBy").text(data.task.created_by.name || '');
-                    $("#taskCreatedAt").text(data.task.created_at || '');
-                    $("#taskDeadline").text(data.task.deadline || '');
-                    $("#taskDescription").html(data.task.description || '');  // Use .html() for HTML content
+                    $("#taskCreatedAt").text(formatDate(data.task.created_at) || '');
+                    $("#taskDeadline").text(formatDate(data.task.deadline) || '');
+                    $("#taskDescription").html(data.task.description || ''); // Use .html() for HTML content
                 }
             })
         }
 
 
-        const users = [
-  { id: 2, name: "halim", email: "halim@gmail.com", username: "halim", email_verified_at: null },
-  { id: 3, name: "youssef", email: "youssef@gmail.com", username: "youssef", email_verified_at: null }
-];
+        const users = [{
+                id: 2,
+                name: "halim",
+                email: "halim@gmail.com",
+                username: "halim",
+                email_verified_at: null
+            },
+            {
+                id: 3,
+                name: "youssef",
+                email: "youssef@gmail.com",
+                username: "youssef",
+                email_verified_at: null
+            }
+        ];
 
-users.forEach(user => {
-  console.log('ID:', user.id);
-  console.log('Name:', user.name);
-  console.log('Email:', user.email);
-  console.log('Username:', user.username);
-  console.log('Email Verified At:', user.email_verified_at);
-  console.log('---'); // separator for readability
-});
+        users.forEach(user => {
+            console.log('ID:', user.id);
+            console.log('Name:', user.name);
+            console.log('Email:', user.email);
+            console.log('Username:', user.username);
+            console.log('Email Verified At:', user.email_verified_at);
+            console.log('---'); // separator for readability
+        });
 
 
 
@@ -619,5 +639,4 @@ users.forEach(user => {
         });
     </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 @endsection
