@@ -4,7 +4,8 @@ use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectController ;
+use App\Http\Controllers\Api\ProjectController as ApiProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,3 +39,16 @@ Route::middleware("auth")->group(function () {
 });
 
 
+
+
+
+Route::middleware("auth")->group(function () {
+
+    Route::prefix("projects")->name("projects.")->controller(ApiProjectController::class)->group(function () {
+        // Route::get("/", "index")->name("index");
+        Route::post("/", "store")->name("store");
+        Route::put("/{project}", "update")->name("update");
+        Route::delete("/{project}", "destroy")->name("destroy");
+        Route::get("/{project}", "show")->name("show");
+    });
+});

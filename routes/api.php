@@ -34,13 +34,13 @@ Route::controller(AuthController::class)->prefix("auth")->group(function () {
 
 Route::middleware("auth")->group(function () {
 
-    Route::prefix("projects")->name("projects.")->controller(ProjectController::class)->group(function () {
-        Route::get("/", "index")->name("index");
-        Route::post("/", "store")->name("store");
-        Route::put("/{project}", "update")->name("update");
-        Route::delete("/{project}", "destroy")->name("destroy");
-        Route::get("/{project}", "show")->name("show");
-    });
+    // Route::prefix("projects")->name("projects.")->controller(ProjectController::class)->group(function () {
+    //     Route::get("/", "index")->name("index");
+    //     Route::post("/", "store")->name("store");
+    //     Route::put("/{project}", "update")->name("update");
+    //     Route::delete("/{project}", "destroy")->name("destroy");
+    //     Route::get("/{project}", "show")->name("show");
+    // });
 
 
     Route::prefix("tasks")->name("tasks.")->controller(TaskController::class)->group(function () {
