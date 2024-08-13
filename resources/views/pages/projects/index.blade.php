@@ -206,7 +206,7 @@
                                         <div class="files-area d-flex justify-content-between align-items-center" id="">
                                             <div class="files-area__left d-flex align-items-center">
                                                 <div class="files-area__img">
-                                                    <img src="http://45.33.34.15:8002/assets/img/zip@2x.png" alt="img" class="wh-42">
+                                                    <img src="{{asset("file-icone.png")}}" alt="img" class="wh-42">
                                                 </div>
                                                 <div class="files-area__title">
                                                     <p class="mb-0 fs-14 fw-500 color-dark text-capitalize">${item.file_description}
