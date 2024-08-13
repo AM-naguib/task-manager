@@ -6,6 +6,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProjectController ;
 use App\Http\Controllers\Api\ProjectController as ApiProjectController;
+use App\Http\Controllers\Api\RoleController as ApiRoleController;
+use App\Http\Controllers\Api\TaskController as ApiTaskController;
+use App\Http\Controllers\Api\UserController as ApiUserController;
+use App\Http\Controllers\Api\CommentController as ApiCommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,5 +54,38 @@ Route::middleware("auth")->group(function () {
         Route::put("/{project}", "update")->name("update");
         Route::delete("/{project}", "destroy")->name("destroy");
         Route::get("/{project}", "show")->name("show");
+    });
+
+
+    Route::prefix("tasks")->name("tasks.")->controller(ApiTaskController::class)->group(function () {
+        Route::get("/", "index")->name("api.index");
+        Route::post("/", "store")->name("store");
+        Route::put("/{task}", "update")->name("update");
+        Route::delete("/{task}", "destroy")->name("update");
+        Route::get("/{task}", "show")->name("show");
+    });
+
+
+
+    Route::prefix("comments")->name("comments.")->controller(ApiCommentController::class)->group(function () {
+        Route::get("/", "index")->name("index");
+        Route::post("/", "store")->name("store");
+        Route::put("/{comment}", "update")->name("update");
+        Route::delete("/{comment}", "destroy")->name("update");
+        Route::get("/{comment}", "show")->name("show");
+    });
+
+
+
+    Route::resource('roles', ApiRoleController::class);
+
+
+
+
+    Route::prefix("users")->name("users.")->controller(ApiUserController::class)->group(function () {
+        Route::post("/", "store")->name("store");
+        Route::put("/{user}", "update")->name("update");
+        Route::get("/{user}", "show")->name("show");
+        Route::delete("/{user}", "destroy")->name("destroy");
     });
 });
