@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Document extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
+public function documenFiles(){
+
+    return $this->hasMany(DocumentFile::class);
+}
+
+public function project(){
+    return $this->belongsTo(Project::class);
+}
+
 }

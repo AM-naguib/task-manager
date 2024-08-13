@@ -10,7 +10,7 @@
                     </div>
                     <div class="card-body">
                         <div class="col-8">
-                            <form action="{{ route('documents.store') }}" method="POST" >
+                            <form action="{{ route('documents.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="col-lg-12">
                                     <div class="bg-white mb-25 rounded-xl">
@@ -70,9 +70,12 @@
         function addFile() {
             $('#files').append(fileHtml());
 
+
         }
 
         function fileHtml(){
+
+
             return ` <div class="mb-3">
                                         <label for="name" class="form-label">File Description</label>
                                         <div class="file-info d-flex gap-5">

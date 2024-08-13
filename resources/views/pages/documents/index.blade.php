@@ -5,9 +5,9 @@
             <div class="col-lg-12">
                 <div class="breadcrumb-main">
                     <div class="breadcrumb-action justify-content-center flex-wrap">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTaskModal">
-                            Add Documents
-                        </button>
+                        <a href="{{ route('documents.create') }}" class="btn btn-primary btn--raised"> Add Documents</a>
+
+
                     </div>
                 </div>
             </div>
@@ -38,35 +38,25 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse ($tasks as $task)
-                                            <tr>
+                                        @forelse ($docs as $doc)
+                                            <tr id="doc_{{$doc->id}}">
 
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $task->name }}</td>
-                                                <td>{{ $task->status }}</td>
-                                                <td>{{ $task->priority }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($task->deadline)->format('d-m-Y') }}</td>
-                                                <td>{{ $task->project->name ?? '' }}</td>
-                                                <td>
-                                                    @foreach ($task->users as $user)
-                                                        <span class="p-1 bg-primary rounded text-white"
-                                                            style="font-size: 12px">{{ $user->name }}</span>
-                                                    @endforeach
-                                                </td>
+                                                <td>{{ $doc->project->name  ?? "No Project"}}</td>
 
                                                 <td class="d-flex  gap-2">
-                                                    <button type="button" onclick="fillShow({{ $task->id }})"
+                                                    <button type="button" onclick="fillShow({{ $doc->id }})"
                                                         class="btn btn-primary" data-toggle="modal"
                                                         data-target="#rightModal">
                                                         View
                                                     </button>
 
-                                                    <a href="{{ route('tasks.edit', $task->id) }}"
-                                                        class="btn btn-warning">Update Task</a>
+                                                    <a href="{{ route('documents.edit', $doc->id) }}"
+                                                        class="btn btn-warning">Update Document</a>
 
 
                                                     <button class="btn btn-danger"
-                                                        onclick="deleteForm({{ $task->id }})">Delete</button>
+                                                        onclick="deleteDoc({{ $doc->id }})">Delete</button>
 
                                                 @empty
                                         @endforelse
@@ -93,5 +83,23 @@
 
 
 @section('js_footer')
+<script>
+      function deleteDoc(id) {
+            $.ajax({
+                url: `{{ route('documents.destroy', '') }}/${id}`,
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    $("#doc_" + id).remove();
 
+                },
+                error: function(data) {
+                    // Handle error here, e.g., display an error message
+                    console.error('Error deleting file:', data);
+                }
+            });
+        }
+</script>
 @endsection

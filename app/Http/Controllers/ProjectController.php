@@ -12,5 +12,15 @@ class ProjectController extends Controller
         return view('pages.projects.index',compact("projects"));
     }
 
-    
+    public function projectDocument(Project $project)
+    {
+        $project->load('document.documenFiles');
+
+        return response()->json([
+            "message" => "Success",
+            "project" => $project,
+        ], 200);
+    }
+
+
 }

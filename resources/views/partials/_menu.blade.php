@@ -23,6 +23,12 @@
                 <span class="menu-text">Tasks</span>
             </a>
         </li>
+        <li>
+            <a href="{{ route('documents.index') }}">
+                <span class="nav-icon uil uil-create-dashboard"></span>
+                <span class="menu-text">Documents</span>
+            </a>
+        </li>
 
 
 

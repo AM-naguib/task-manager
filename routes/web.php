@@ -36,6 +36,7 @@ Route::middleware("auth")->group(function () {
     Route::get("/", [HomeController::class, "index"])->name("index");
 
     Route::get("projects", [ProjectController::class, "index"])->name("projects.index");
+    Route::get('projects/document/{project}', [ProjectController::class, 'projectDocument'])->name('projects.document');
 
 
 
@@ -98,5 +99,8 @@ Route::middleware("auth")->group(function () {
             Route::get("/{document}/edit","edit")->name("edit");
             Route::put("/{document}","update")->name("update");
             Route::delete("/{document}","destroy")->name("destroy");
+
+
     });
+    Route::delete("document/file/{file}", [DocumentController::class, "destroyFile"])->name("documents.destroyFile");
 });

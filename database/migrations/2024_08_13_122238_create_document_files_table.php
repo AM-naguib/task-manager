@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('documents', function (Blueprint $table) {
+        Schema::create('document_files', function (Blueprint $table) {
             $table->id();
-            $table->text("description")->nullable();
-            $table->foreignId("project_id")->nullable()->constrained("projects")->onDelete("cascade");
-            $table->foreignId("created_by")->constrained("users")->onDelete("cascade");
+            $table->text("file_description")->nullable();
+            $table->text("file_url")->nullable();
+            $table->foreignId("document_id")->constrained()->onDelete("cascade");
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('documents');
+        Schema::dropIfExists('document_files');
     }
 };

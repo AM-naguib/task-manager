@@ -517,33 +517,6 @@
         }
 
 
-        const users = [{
-                id: 2,
-                name: "halim",
-                email: "halim@gmail.com",
-                username: "halim",
-                email_verified_at: null
-            },
-            {
-                id: 3,
-                name: "youssef",
-                email: "youssef@gmail.com",
-                username: "youssef",
-                email_verified_at: null
-            }
-        ];
-
-        users.forEach(user => {
-            console.log('ID:', user.id);
-            console.log('Name:', user.name);
-            console.log('Email:', user.email);
-            console.log('Username:', user.username);
-            console.log('Email Verified At:', user.email_verified_at);
-            console.log('---'); // separator for readability
-        });
-
-
-
         // function fillShow(id) {
         //     $.ajax({
         //         url: `{{ route('tasks.show', '') }}/${id}`,
