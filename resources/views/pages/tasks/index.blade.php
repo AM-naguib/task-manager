@@ -381,11 +381,17 @@
                 </div>
                 <div class="modal-body">
                     <div class="task">
-                        <div class="task-head">
+                        <div class="task-head border-bottom">
                             <div class="task-title d-flex gap-1 mb-1">
                                 <h3>Task Name : </h3>
-                                <h3 id="taskName">dasda</h3>
+                                <h3 id="taskName"></h3>
                             </div>
+
+                            <div class="task-project d-flex gap-1 mb-1">
+                                <p class="m-0">Project Name : </p>
+                                <p class="m-0" id="projectName">dasda</p>
+                            </div>
+
                             <div class="task-status mb-1 gap-1  d-flex">
                                 <p class="m-0">Task Status : </p>
                                 <p class="m-0" id="taskStatus"></p>
@@ -393,16 +399,13 @@
 
                             <div class="task-priority mb-1 gap-1 d-flex">
                                 <p class="m-0">Task Priority : </p>
-                                <p class="m-0" id="taskPriority">dsadas</p>
+                                <p class="m-0" id="taskPriority"></p>
                             </div>
-                            <div class="task-project d-flex gap-1 mb-1">
-                                <h3>Project Name : </h3>
-                                <h3 id="projectName">dasda</h3>
-                            </div>
+
 
                             <div class="task-assign mb-1 gap-1 d-flex">
                                 <p class="m-0">Assign To : </p>
-                                <p class="m-0" id="taskAssign">dsad</p>
+                                <p class="m-0" id="taskAssign"></p>
                             </div>
                             <div class="task-created-ay mb-1 gap-1 d-flex">
                                 <p class="m-0">Created By : </p>
@@ -421,6 +424,14 @@
 
 
                         </div>
+                        <div class="task-body ">
+                            <div class="task-description">
+                                <h3 class="py-3 border-bottom">Description</h3>
+                                <div class="mt-3" id="taskDescription">
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -437,7 +448,6 @@
 
 
 @section('js_footer')
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         // function drawerr(){
         //     $('#right_drawer').modal('show'); // For Bootstrap
@@ -477,38 +487,57 @@
             });
         }
 
-
-        function fillShow(id) {
+        function fillShow(id){
             $.ajax({
                 url: `{{ route('tasks.show', '') }}/${id}`,
                 type: 'get',
                 success: function(data) {
-
-                    $("#showTaskModal").modal('show');
-                    $('#nameShow').val(data.task.name || '');
-                    $('.descriptionShow').val(data.task.description || '');
-                    $('#priorityShow').val(data.task.priority || '');
-                    $('#statusShow').val(data.task.status || '');
-                    $('#projectShow').val(data.task.project_id || '');
-                    $('#deadlineShow').val(data.task.deadline || '');
-
-                    let userIds = data.task.user_ids || [];
-
-                    // // Clear previous selections
-
-                    // Set new selections
-                    $('#assignShow option').each(function() {
-                        let optionValue = parseInt($(this).val());
-                        if (userIds.includes(optionValue)) {
-                            $(this).prop('selected', true);
-                        }
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error('Form submission error:', error, xhr.responseText);
+                    $("#taskName").text(data.task.name || '');
+                    $("#projectName").text(data.task.project.name || '');
+                    $("#taskStatus").text(data.task.status || '');
+                    $("#taskPriority").text(data.task.priority || '');
+                    $("#taskAssign").text(data.task.user.name || '');
+                    $("#taskCreatedBy").text(data.task.user.name || '');
+                    $("#taskCreatedAt").text(data.task.created_at || '');
+                    $("#taskDeadline").text(data.task.deadline || '');
+                    $("#taskDescription").text(data.task.description || '');
                 }
-            });
+            })
         }
+
+
+
+        // function fillShow(id) {
+        //     $.ajax({
+        //         url: `{{ route('tasks.show', '') }}/${id}`,
+        //         type: 'get',
+        //         success: function(data) {
+
+        //             $("#showTaskModal").modal('show');
+        //             $('#nameShow').val(data.task.name || '');
+        //             $('.descriptionShow').val(data.task.description || '');
+        //             $('#priorityShow').val(data.task.priority || '');
+        //             $('#statusShow').val(data.task.status || '');
+        //             $('#projectShow').val(data.task.project_id || '');
+        //             $('#deadlineShow').val(data.task.deadline || '');
+
+        //             let userIds = data.task.user_ids || [];
+
+        //             // // Clear previous selections
+
+        //             // Set new selections
+        //             $('#assignShow option').each(function() {
+        //                 let optionValue = parseInt($(this).val());
+        //                 if (userIds.includes(optionValue)) {
+        //                     $(this).prop('selected', true);
+        //                 }
+        //             });
+        //         },
+        //         error: function(xhr, status, error) {
+        //             console.error('Form submission error:', error, xhr.responseText);
+        //         }
+        //     });
+        // }
 
 
 
@@ -572,4 +601,6 @@
             $("#datepicker").datepicker();
         });
     </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 @endsection

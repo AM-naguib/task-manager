@@ -59,7 +59,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        $taskData = $task->load('comments')->toArray(); // Convert task and its comments to an array
+        $taskData = $task->load('comments',"project")->toArray(); // Convert task and its comments to an array
 
         $taskData['user_ids'] = $task->users->pluck('id');
 

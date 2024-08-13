@@ -32,46 +32,46 @@ Route::controller(AuthController::class)->prefix("auth")->group(function () {
 });
 
 
-Route::middleware("auth")->group(function () {
+// Route::middleware("auth")->group(function () {
 
-    // Route::prefix("projects")->name("projects.")->controller(ProjectController::class)->group(function () {
-    //     Route::get("/", "index")->name("index");
-    //     Route::post("/", "store")->name("store");
-    //     Route::put("/{project}", "update")->name("update");
-    //     Route::delete("/{project}", "destroy")->name("destroy");
-    //     Route::get("/{project}", "show")->name("show");
-    // });
-
-
-    Route::prefix("tasks")->name("tasks.")->controller(TaskController::class)->group(function () {
-        Route::get("/", "index")->name("api.index");
-        Route::post("/", "store")->name("store");
-        Route::put("/{task}", "update")->name("update");
-        Route::delete("/{task}", "destroy")->name("update");
-        Route::get("/{task}", "show")->name("show");
-    });
+//     Route::prefix("projects")->name("projects.")->controller(ProjectController::class)->group(function () {
+//         Route::get("/", "index")->name("index");
+//         Route::post("/", "store")->name("store");
+//         Route::put("/{project}", "update")->name("update");
+//         Route::delete("/{project}", "destroy")->name("destroy");
+//         Route::get("/{project}", "show")->name("show");
+//     });
 
 
-
-    Route::prefix("comments")->name("comments.")->controller(CommentController::class)->group(function () {
-        Route::get("/", "index")->name("index");
-        Route::post("/", "store")->name("store");
-        Route::put("/{comment}", "update")->name("update");
-        Route::delete("/{comment}", "destroy")->name("update");
-        Route::get("/{comment}", "show")->name("show");
-    });
+//     Route::prefix("tasks")->name("tasks.")->controller(TaskController::class)->group(function () {
+//         Route::get("/", "index")->name("api.index");
+//         Route::post("/", "store")->name("store");
+//         Route::put("/{task}", "update")->name("update");
+//         Route::delete("/{task}", "destroy")->name("update");
+//         Route::get("/{task}", "show")->name("show");
+//     });
 
 
 
-    Route::resource('roles', RoleController::class);
+//     Route::prefix("comments")->name("comments.")->controller(CommentController::class)->group(function () {
+//         Route::get("/", "index")->name("index");
+//         Route::post("/", "store")->name("store");
+//         Route::put("/{comment}", "update")->name("update");
+//         Route::delete("/{comment}", "destroy")->name("update");
+//         Route::get("/{comment}", "show")->name("show");
+//     });
+
+
+
+//     Route::resource('roles', RoleController::class);
 
 
 
 
-    Route::prefix("users")->name("users.")->controller(UserController::class)->group(function () {
-        Route::post("/", "store")->name("store");
-        Route::put("/{user}", "update")->name("update");
-        Route::get("/{user}", "show")->name("show");
-        Route::delete("/{user}", "destroy")->name("destroy");
-    });
-});
+//     Route::prefix("users")->name("users.")->controller(UserController::class)->group(function () {
+//         Route::post("/", "store")->name("store");
+//         Route::put("/{user}", "update")->name("update");
+//         Route::get("/{user}", "show")->name("show");
+//         Route::delete("/{user}", "destroy")->name("destroy");
+//     });
+// });

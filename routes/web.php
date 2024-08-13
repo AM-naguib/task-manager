@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\TaskController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProjectController ;
+use App\Http\Controllers\TaskController as TaskController;
+use Illuminate\Support\Facades\Route ;
+use App\Http\Controllers\AuthController as AuthController;
+use App\Http\Controllers\HomeController as HomeController;
+use App\Http\Controllers\ProjectController  as ProjectController;
 use App\Http\Controllers\Api\ProjectController as ApiProjectController;
 use App\Http\Controllers\Api\RoleController as ApiRoleController;
 use App\Http\Controllers\Api\TaskController as ApiTaskController;
@@ -58,7 +58,7 @@ Route::middleware("auth")->group(function () {
 
 
     Route::prefix("tasks")->name("tasks.")->controller(ApiTaskController::class)->group(function () {
-        Route::get("/", "index")->name("api.index");
+        // Route::get("/", "index")->name("api.index");
         Route::post("/", "store")->name("store");
         Route::put("/{task}", "update")->name("update");
         Route::delete("/{task}", "destroy")->name("update");
@@ -68,7 +68,7 @@ Route::middleware("auth")->group(function () {
 
 
     Route::prefix("comments")->name("comments.")->controller(ApiCommentController::class)->group(function () {
-        Route::get("/", "index")->name("index");
+        // Route::get("/", "index")->name("index");
         Route::post("/", "store")->name("store");
         Route::put("/{comment}", "update")->name("update");
         Route::delete("/{comment}", "destroy")->name("update");
