@@ -15,4 +15,12 @@ class TaskController extends Controller
         $users = User::get();
         return view("pages.tasks.index",compact("tasks","projects","users"));
     }
+
+
+    public function edit(Task $task){
+        $projects = Project::get();
+        $users = User::get();
+
+        return view("pages.tasks.edit",compact("task","projects","users"));
+    }
 }

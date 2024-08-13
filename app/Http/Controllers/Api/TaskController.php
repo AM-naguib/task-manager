@@ -94,14 +94,8 @@ class TaskController extends Controller
             unset($data["users"]);
             $task->update($data);
             $task->users()->sync($request->users);
-            return response()->json(
-                [
-                    "message" => "Task Updated",
-                    'task'    => $task->fresh(),
-                    "users" => $task->users
-                ],
-                201
-            );
+            toastr()->success('Task edited successfully!');
+            return to_route("tasks.index");
         } catch (\Exception $e) {
             return response()->json(["message" => $e->getMessage()], 500);
         }

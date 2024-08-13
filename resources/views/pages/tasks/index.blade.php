@@ -52,7 +52,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                         @forelse ($tasks as $task)
                                             <tr>
 
@@ -70,11 +69,18 @@
                                                 </td>
 
                                                 <td class="d-flex  gap-2">
-                                                    <button class="btn btn-primary"  onclick="fillShow({{ $task->id }})">View</button>
-                                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                                        <button type="button" onclick="fillShow({{ $task->id }})" class="btn btn-primary" data-toggle="modal"
+                                                            data-target="#rightModal">
+                                                            View
+                                                        </button>
+                                                    {{-- <button class="btn btn-primary"
+                                                        onclick="fillShow({{ $task->id }})">View</button> --}}
+                                                    <a href="{{ route('tasks.edit', $task->id) }}"
+                                                        class="btn btn-warning">Update Task</a>
+                                                    {{-- <button type="button" class="btn btn-warning" data-bs-toggle="modal"
                                                         onclick="fillUpdateForm({{ $task->id }})">
                                                         Update Task
-                                                    </button>
+                                                    </button> --}}
 
                                                     <button class="btn btn-danger"
                                                         onclick="deleteForm({{ $task->id }})">Delete</button>
@@ -97,7 +103,6 @@
     </div>
 
 
-    <!-- Button trigger modal -->
 
 
     <!-- Add Task Modal -->
@@ -159,7 +164,7 @@
                                 <div class="reply-form pt-0">
                                     <div class="mailCompose-form-content">
                                         <div class="form-group">
-                                            <textarea name="description" id="mail-reply-message2" class="form-control-lg" placeholder="Type your message..."></textarea>
+                                            <textarea name="description" id="mail-reply-message" class="form-control-lg" placeholder="Type your message..."></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -254,16 +259,78 @@
     </div>
 
 
-    {{-- <div class="col-lg-12">
-        <div class="bg-white mb-25 rounded-xl">
-            <div class="reply-form pt-0">
-                <form action="#">
-                    <div class="mailCompose-form-content">
-                        <div class="form-group">
-                            <textarea name="message" id="mail-reply-message2" class="form-control-lg" placeholder="Type your message..."></textarea>
+
+
+
+
+    {{-- <div class="modal fade" id="showTaskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="showTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="showTaskModalLabel">show Project</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Task Name</label>
+                        <input type="text" class="form-control" id="nameShow" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="priority" class="form-label">Task Priority</label>
+                        <select id="priorityShow" class="form-select">
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Task Status</label>
+                        <select id="statusShow" class="form-select">
+                            <option value="On Hold">On Hold</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="project" class="form-label">Project</label>
+                        <select id="projectShow" class="form-select">
+                            @foreach ($projects as $project)
+                                <option value="{{ $project->id }}">{{ $project->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="assign" class="form-label">Assign To</label>
+                        <select id="assignShow" class="form-select" multiple>
+                            @foreach ($users as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deadline" class="form-label">Task Deadline</label>
+                        <input type="text" id="deadlineShow" class="form-control" placeholder="Select a date">
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="bg-white mb-25 rounded-xl">
+                            <div class="reply-form pt-0">
+                                <div class="mailCompose-form-content">
+                                    <div class="form-group">
+                                        <textarea id="mail-reply-message3" class="form-control-lg descriptionShow" placeholder="Type your message..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div> --}}
@@ -274,86 +341,107 @@
 
 
 
+    <style>
+        .modal.right .modal-dialog {
+            position: fixed;
+            right: 0;
+            margin: auto;
+            width: 1500px;
+            height: 100%;
+            transform: translate3d(100%, 0, 0);
+            transition: transform 0.3s ease-out;
+        }
 
-    <div class="modal fade" id="showTaskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="showTaskModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="showTaskModalLabel">show Project</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+        .modal.right .modal-content {
+            height: 100%;
+            overflow-y: auto;
+        }
 
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Task Name</label>
-                        <input type="text" class="form-control" id="nameShow"  readonly >
-                    </div>
+        .modal.fade .modal-dialog {
+            transform: translate3d(100%, 0, 0);
+        }
 
-                    <div class="mb-3">
-                        <label for="priority" class="form-label">Task Priority</label>
-                        <select   id="priorityShow" class="form-select">
-                            <option value="Low">Low</option>
-                            <option value="Medium">Medium</option>
-                            <option value="High">High</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="status" class="form-label">Task Status</label>
-                        <select   id="statusShow" class="form-select">
-                            <option value="On Hold">On Hold</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Completed">Completed</option>
-                            <option value="Cancelled">Cancelled</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="project" class="form-label">Project</label>
-                        <select   id="projectShow" class="form-select">
-                            @foreach ($projects as $project)
-                                <option value="{{ $project->id }}">{{ $project->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="assign" class="form-label">Assign To</label>
-                        <select   id="assignShow" class="form-select" multiple>
-                            @foreach ($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="deadline" class="form-label">Task Deadline</label>
-                        <input type="text"   id="deadlineShow" class="form-control"
-                            placeholder="Select a date">
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="bg-white mb-25 rounded-xl">
-                            <div class="reply-form pt-0">
-                                <div class="mailCompose-form-content">
-                                    <div class="form-group">
-                                        <textarea   id="mail-reply-message3" class="form-control-lg descriptionShow"
-                                            placeholder="Type your message..."></textarea>
-                                    </div>
-                                </div>
+        .modal.show .modal-dialog {
+            transform: translate3d(0, 0, 0);
+        }
+    </style>
+
+
+
+    <!-- Modal -->
+    <div class="modal right fade" id="rightModal" tabindex="-1" role="dialog" aria-labelledby="rightModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="taskTitle">Right Side Modal</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="task">
+                        <div class="task-head">
+                            <div class="task-title d-flex gap-1 mb-1">
+                                <h3>Task Name : </h3>
+                                <h3 id="taskName">dasda</h3>
                             </div>
+                            <div class="task-status mb-1 gap-1  d-flex">
+                                <p class="m-0">Task Status : </p>
+                                <p class="m-0" id="taskStatus"></p>
+                            </div>
+
+                            <div class="task-priority mb-1 gap-1 d-flex">
+                                <p class="m-0">Task Priority : </p>
+                                <p class="m-0" id="taskPriority">dsadas</p>
+                            </div>
+                            <div class="task-project d-flex gap-1 mb-1">
+                                <h3>Project Name : </h3>
+                                <h3 id="projectName">dasda</h3>
+                            </div>
+
+                            <div class="task-assign mb-1 gap-1 d-flex">
+                                <p class="m-0">Assign To : </p>
+                                <p class="m-0" id="taskAssign">dsad</p>
+                            </div>
+                            <div class="task-created-ay mb-1 gap-1 d-flex">
+                                <p class="m-0">Created By : </p>
+                                <p class="m-0" id="taskCreatedBy"></p>
+                            </div>
+                            <div class="task-created-at mb-1 gap-1 d-flex">
+                                <p class="m-0">Created At : </p>
+                                <p class="m-0" id="taskCreatedAt"></p>
+                            </div>
+
+                            <div class="task-deadline mb-1 gap-1 d-flex">
+                                <p class="m-0">Deadline : </p>
+                                <p class="m-0" id="taskDeadline"></p>
+                            </div>
+
+
+
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                     </div>
-                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+
+
 @endsection
 
 
 
 @section('js_footer')
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
+        // function drawerr(){
+        //     $('#right_drawer').modal('show'); // For Bootstrap
+        // }
         function fillUpdateForm(id) {
             $.ajax({
                 url: `{{ route('tasks.show', '') }}/${id}`,
@@ -397,14 +485,14 @@
                 success: function(data) {
 
                     $("#showTaskModal").modal('show');
-                     $('#nameShow').val(data.task.name || '');
+                    $('#nameShow').val(data.task.name || '');
                     $('.descriptionShow').val(data.task.description || '');
                     $('#priorityShow').val(data.task.priority || '');
                     $('#statusShow').val(data.task.status || '');
                     $('#projectShow').val(data.task.project_id || '');
                     $('#deadlineShow').val(data.task.deadline || '');
 
-                     let userIds = data.task.user_ids || [];
+                    let userIds = data.task.user_ids || [];
 
                     // // Clear previous selections
 
@@ -414,7 +502,7 @@
                         if (userIds.includes(optionValue)) {
                             $(this).prop('selected', true);
                         }
-                     });
+                    });
                 },
                 error: function(xhr, status, error) {
                     console.error('Form submission error:', error, xhr.responseText);
@@ -454,9 +542,9 @@
                 type: 'POST',
                 data: formData,
                 success: function(response) {
-                     $('#staticBackdrop').modal('hide');
-                     $("table").load(location.href + " table ");
-                     $("#updateTaskModal").modal('hide');
+                    $('#staticBackdrop').modal('hide');
+                    $("table").load(location.href + " table ");
+                    $("#updateTaskModal").modal('hide');
 
                 },
                 error: function(xhr) {
