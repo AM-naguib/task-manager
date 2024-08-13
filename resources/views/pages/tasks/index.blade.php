@@ -142,6 +142,7 @@
                         <div class="mb-3">
                             <label for="project" class="form-label">Project</label>
                             <select name="project_id" id="project" class="form-select">
+                                <option value="">Select Project</option>
                                 @foreach ($projects as $project)
                                     <option value="{{ $project->id }}">{{ $project->name }}</option>
                                 @endforeach
@@ -165,7 +166,7 @@
                                 <div class="reply-form pt-0">
                                     <div class="mailCompose-form-content">
                                         <div class="form-group">
-                                            <textarea name="description" id="mail-reply-message" class="form-control-lg" placeholder="Type your message..."></textarea>
+                                            <textarea name="description" id="mail-reply-message" class="form-control-lg negoss" placeholder="Type your message..."></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -564,6 +565,9 @@
                     console.log('Form submitted successfully:', response);
                     $('#addTaskModal').modal('hide');
                     $("table").load(location.href + " table ");
+                    $('#addForm')[0].reset();
+                    $(".trumbowyg-editor").html(null);
+
                 },
                 error: function(xhr) {
                     console.error('Form submission error:', xhr.responseText);
