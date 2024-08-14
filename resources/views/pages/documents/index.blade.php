@@ -39,10 +39,10 @@
                                     </thead>
                                     <tbody>
                                         @forelse ($docs as $doc)
-                                            <tr id="doc_{{$doc->id}}">
+                                            <tr id="doc_{{ $doc->id }}">
 
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $doc->project->name  ?? "No Project"}}</td>
+                                                <td>{{ $doc->project->name ?? 'No Project' }}</td>
 
                                                 <td class="d-flex  gap-2">
                                                     <button type="button" onclick="fillShow({{ $doc->id }})"
@@ -78,13 +78,78 @@
 
 
 
+    <style>
+        .modal.right .modal-dialog {
+            position: fixed;
+            right: 0;
+            margin: auto;
+            width: 1500px;
+            height: 100%;
+            transform: translate3d(100%, 0, 0);
+            transition: transform 0.3s ease-out;
+        }
+
+        .modal.right .modal-content {
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .modal.fade .modal-dialog {
+            transform: translate3d(100%, 0, 0);
+        }
+
+        .modal.show .modal-dialog {
+            transform: translate3d(0, 0, 0);
+        }
+    </style>
+
+
+
+    <!-- Modal -->
+    <div class="modal right fade" id="rightModal" tabindex="-1" role="dialog" aria-labelledby="rightModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title " id="projectTitle">Document</h5>
+                    <button type="button" onclick="$('#rightModal').modal('hide')" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="project">
+                        <div class="project-head border-bottom">
+                            <h3 class="py-2">Description</h3>
+                        </div>
+                        <div class="description-div" id="projectDescription">
+
+                        </div>
+                        <div class="project-body">
+                            <div class="project-files">
+                                <h3 class="py-3 border-bottom">Files</h3>
+                                <div class="mt-3" id="projectFiles">
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="$('#rightModal').modal('hide')"
+                        data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 
 
 @section('js_footer')
-<script>
-      function deleteDoc(id) {
+    <script>
+        function deleteDoc(id) {
             $.ajax({
                 url: `{{ route('documents.destroy', '') }}/${id}`,
                 type: 'DELETE',
@@ -101,5 +166,45 @@
                 }
             });
         }
-</script>
+
+
+        function fillShow(id) {
+            $.ajax({
+                url: `{{ route('documents.show', '') }}/${id}`,
+                type: 'get',
+                success: function(data) {
+                    $("#rightModal").modal("show");
+                    $("#projectDescription").html(data.description || '');
+                    $("#projectFiles").html(showFiles(data.documen_files) || '');
+                }
+            })
+        }
+
+        function showFiles(files) {
+            
+            let html = ``;
+            files.forEach(item => {
+                html += `                                    <div class="mb-20">
+                                        <div class="files-area d-flex justify-content-between align-items-center" id="">
+                                            <div class="files-area__left d-flex align-items-center">
+                                                <div class="files-area__img">
+                                                    <img src="{{ asset('file-icone.png') }}" alt="img" class="wh-42">
+                                                </div>
+                                                <div class="files-area__title">
+                                                    <p class="mb-0 fs-14 fw-500 color-dark text-capitalize">${item.file_description}
+                                                    </p>
+                                                    <div class="d-flex text-capitalize">
+                                                        <a target="_blank" href="storage/${item.file_url}" class="fs-12 fw-500 color-primary ">download</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>`
+
+            });
+            return html
+
+        }
+    </script>
 @endsection

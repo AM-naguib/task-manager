@@ -104,6 +104,7 @@ Route::middleware("auth")->group(function () {
             Route::get("/{document}/edit","edit")->name("edit");
             Route::put("/{document}","update")->name("update");
             Route::delete("/{document}","destroy")->name("destroy");
+            Route::get("/{document}","show")->name("show");
 
 
     });

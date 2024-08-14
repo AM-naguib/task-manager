@@ -18,7 +18,6 @@
                     <div class="card-header color-dark fw-500">
                         <p class="m-0">All Tasks</p>
                     </div>
-
                     <div class="card-body">
                         <table id="tasksTable" class="table table-bordered ">
                             <thead>
@@ -35,9 +34,14 @@
                             </thead>
                             <tbody>
                                 @forelse ($tasks as $task)
+                    @php
+                        // Regular expression to match Arabic letters
+                        $arabicRegex = '/^[\x{0600}-\x{06FF}]/u';
+                        $direction = preg_match($arabicRegex, $task->name) ? 'rtl' : 'ltr';
+                    @endphp
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $task->name }}</td>
+                                        <td style="direction: {{ $direction }};">{{ $task->name }}</td>
                                         <td
                                             style="color: @if ($task->priority == 'High') red @elseif ($task->priority == 'Medium') #a3a300 @endif">
                                             {{ $task->priority }}</td>
@@ -481,18 +485,16 @@
                 "info": true,
                 "autoWidth": false,
                 "responsive": true,
-                "pageLength": 10, // Default number of rows per page
+                "pageLength": 10,
                 "columnDefs": [{
-                        "orderable": false,
-                        "targets": 7
-                    } // Disable sorting on the 'Actions' column
-                ]
+                    "orderable": false,
+                    "targets": 7
+                }]
             });
         });
     </script>
     <script>
         function changeStatus(id, ele) {
-
             let select = `
             <select name="status" id="status_${id}" class="form-select" onchange="updateStatus(${id})">
                 <option value="Not Started" ${$(ele).html().trim() === "Not Started" ? "selected" : ""}>Not Started</option>

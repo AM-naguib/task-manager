@@ -75,9 +75,9 @@ class DocumentController extends Controller
     }
 
 
-    public function show(string $id)
+    public function show(Document $document)
     {
-        //
+        return response()->json($document->load("documenFiles"));
     }
 
     /**
