@@ -10,7 +10,13 @@ use Illuminate\Http\Request;
 class TaskController extends Controller
 {
     public function index(){
-        $tasks = Task::get();
+        $user = auth()->user();
+        if($user->type == "admin"){
+            $tasks = Task::all();
+        }else{
+            $tasks = $user->tasks;
+        }
+
         $projects = Project::get();
         $users = User::get();
         return view("pages.tasks.index",compact("tasks","projects","users"));

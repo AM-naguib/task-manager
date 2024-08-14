@@ -16,7 +16,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header color-dark fw-500">
-                        <p>All Tasks</p>
+                        <p class="m-0">All Tasks</p>
                     </div>
                     <div class="card-body p-0">
                         <table id="tasksTable" class="table table-bordered ">
