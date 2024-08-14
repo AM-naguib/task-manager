@@ -38,8 +38,8 @@
                                         @endif
                                         <div class="edit-profile__body">
                                             <div class="form-group mb-20">
-                                                <label for="email">Username Or Email Address</label>
-                                                <input type="text" class="form-control" id="username" name="username" value="am-naguib" placeholder="User Name">
+                                                <label for="email">Username</label>
+                                                <input type="text" class="form-control" id="username" name="username" value="" placeholder="User Name">
                                                 @if($errors->has('username'))
                                                     <p class="text-danger">{{$errors->first('username')}}</p>
                                                 @endif
