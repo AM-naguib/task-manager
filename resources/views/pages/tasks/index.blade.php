@@ -600,7 +600,7 @@
             if (confirm("Are you sure you want to delete this Task?")) {
                 $.ajax({
                     type: "DELETE",
-                    url: "{{ route('projects.destroy', ':id') }}".replace(':id', id),
+                    url: "{{ route('tasks.destroy', ':id') }}".replace(':id', id),
                     success: function(response) {
                         $("table").load(location.href + " table ");
                     },
