@@ -13,12 +13,13 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-12">
-                <div class="card">
+            <div class="col-lg-12 mb-30">
+                <div class="card mt-30">
                     <div class="card-header color-dark fw-500">
                         <p class="m-0">All Tasks</p>
                     </div>
-                    <div class="card-body p-0">
+
+                    <div class="card-body">
                         <table id="tasksTable" class="table table-bordered ">
                             <thead>
                                 <tr>
@@ -34,39 +35,52 @@
                             </thead>
                             <tbody>
                                 @forelse ($tasks as $task)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $task->name }}</td>
-                                    <td style="color: @if ($task->priority == 'High') red @elseif ($task->priority == 'Medium') #a3a300 @endif">
-                                        {{ $task->priority }}</td>
-                                    <td>{{ $task->project->name ?? '' }}</td>
-                                    <td style="color: @if ($task->status == 'Not Started') #adadad @elseif ($task->status == 'Assigned') #f90000 @elseif ($task->status == 'Ready For Test') #fbbc00 @elseif ($task->status == 'In Progress') #1103d1 @elseif ($task->status == 'Done') #5ac100 @endif">
-                                        {{ $task->status }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($task->deadline)->format('d-m-Y') }}</td>
-                                    <td>
-                                        @foreach ($task->users as $user)
-                                        <span class="p-1 bg-primary rounded text-white" style="font-size: 12px">{{ $user->name }}</span>
-                                        @endforeach
-                                    </td>
-                                    <td class="d-flex align-items-center p-4">
-                                        <button type="button" onclick="fillShow({{ $task->id }})" class="btn text-primary" data-toggle="modal"
-                                            data-target="#rightModal">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </button>
-                                        <a href="{{ route('tasks.edit', $task->id) }}" class="btn text-warning"><i class="fa-solid fa-pen-to-square"></i></a>
-                                        <button class="btn text-center text-danger" onclick="deleteForm({{ $task->id }})"><i
-                                                class="fa-solid fa-trash"></i></button>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $task->name }}</td>
+                                        <td
+                                            style="color: @if ($task->priority == 'High') red @elseif ($task->priority == 'Medium') #a3a300 @endif">
+                                            {{ $task->priority }}</td>
+                                        <td>{{ $task->project->name ?? '' }}</td>
+                                        <td
+                                            style="color: @if ($task->status == 'Not Started') #adadad
+                                                   @elseif ($task->status == 'Assigned') #f90000
+                                                   @elseif ($task->status == 'Ready For Test') #fbbc00
+                                                   @elseif ($task->status == 'In Progress') #1103d1
+                                                   @elseif ($task->status == 'Done') #5ac100 @endif">
+                                            <p class="m-0" onclick="changeStatus({{ $task->id }}, this)">
+                                                {{ $task->status }}</p>
+                                        </td>
+
+
+                                        <td>{{ \Carbon\Carbon::parse($task->deadline)->format('d-m-Y') }}</td>
+                                        <td>
+                                            @foreach ($task->users as $user)
+                                                <span class="p-1 bg-primary rounded text-white"
+                                                    style="font-size: 12px">{{ $user->name }}</span>
+                                            @endforeach
+                                        </td>
+                                        <td class="d-flex align-items-center p-4">
+                                            <button type="button" onclick="fillShow({{ $task->id }})"
+                                                class="btn text-primary" data-toggle="modal" data-target="#rightModal">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </button>
+                                            <a href="{{ route('tasks.edit', $task->id) }}" class="btn text-warning"><i
+                                                    class="fa-solid fa-pen-to-square"></i></a>
+                                            <button class="btn text-center text-danger"
+                                                onclick="deleteForm({{ $task->id }},this)"><i
+                                                    class="fa-solid fa-trash"></i></button>
+                                        </td>
+                                    </tr>
                                 @empty
-                                <tr>
-                                    <td colspan="8">No tasks available.</td>
-                                </tr>
+                                    <tr>
+                                        <td colspan="8">No tasks available.</td>
+                                    </tr>
                                 @endforelse
                             </tbody>
                         </table>
 
-                        {{-- <div class="table4 p-25 mb-30">
+                        {{-- <div class="table1 p-25 mb-30">
 
                             <div class="table-responsive">
                                 <table class="table mb-0">
@@ -150,6 +164,116 @@
                                 </table>
                             </div>
                         </div> --}}
+
+
+                        {{-- <div class="userDatatable adv-table-table global-shadow border-0 bg-white w-100 adv-table">
+                            <div class="table-responsive">
+                                <div id="filter-form-container"></div>
+                                <table class="table mb-0 table-borderless adv-table" data-sorting="true"
+                                    data-filter-container="#filter-form-container" data-paging-current="1"
+                                    data-paging-position="right" data-paging-size="10">
+                                    <thead>
+                                        <tr class="userDatatable-header">
+                                            <th>
+                                                <span class="userDatatable-title">#</span>
+                                            </th>
+                                            <th>
+                                                <span class="userDatatable-title">Name</span>
+                                            </th>
+                                            <th>
+                                                <span class="userDatatable-title">Priority</span>
+                                            </th>
+                                            <th>
+                                                <span class="userDatatable-title">Project</span>
+                                            </th>
+                                            <th data-type="html" data-name='position'>
+                                                <span class="userDatatable-title">Status</span>
+                                            </th>
+                                            <th>
+                                                <span class="userDatatable-title">Deadline</span>
+                                            </th>
+                                            <th data-type="html" data-name='status'>
+                                                <span class="userDatatable-title">Assigned Users</span>
+                                            </th>
+                                            <th>
+                                                <span class="userDatatable-title float-right">Actions</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($tasks as $task)
+                                            <tr>
+                                                <td>
+                                                    <div class="userDatatable-content">{{ $loop->iteration }}</div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <div class="userDatatable-inline-title">
+                                                            <a href="#" class="text-dark fw-500">
+                                                                <h6>{{ $task->name }}</h6>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="userDatatable-content"
+                                                        style="color: @if ($task->priority == 'High') red @elseif ($task->priority == 'Medium') #a3a300 @endif">
+                                                        {{ $task->priority }}
+                                                    </div>                                                </td>
+                                                <td>
+                                                    <div class="userDatatable-content">{{ $task->project->name ?? '' }}</div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="userDatatable-content"
+                                                        style="color: @if ($task->status == 'Not Started') #adadad @elseif ($task->status == 'Assigned') #f90000 @elseif ($task->status == 'Ready For Test') #fbbc00 @elseif ($task->status == 'In Progress') #1103d1 @elseif ($task->status == 'Done') #5ac100 @endif">
+                                                        {{ $task->status }}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="userDatatable-content">{{ \Carbon\Carbon::parse($task->deadline)->format('F j, Y') }}</div>
+                                                </td>
+                                                <td>
+                                                    <div class="userDatatable-content d-inline-block">
+                                                        @foreach ($task->users as $user)
+                                                            <span class="p-1 bg-primary rounded text-white" style="font-size: 12px">{{ $user->name }}</span>
+                                                        @endforeach
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <ul class="orderDatatable_actions mb-0 d-flex flex-wrap col-12 justify-content-start">
+                                                        <li>
+                                                            <a href="#" class="view" onclick="fillShow({{ $task->id }})" data-toggle="modal" data-target="#rightModal">
+                                                                <i class="uil uil-eye"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ route('tasks.edit', $task->id) }}" class="edit">
+                                                                <i class="uil uil-edit"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#" class="remove" onclick="deleteForm({{ $task->id }})">
+                                                                <img src="{{ asset('assets/img/svg/trash-2.svg') }}" alt="trash-2" class="svg">
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="8">No tasks available.</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                    <tfoot>
+                                        {{ $tasks->links('vendor.pagination.custom-pagination') }}
+
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div> --}}
+
                     </div>
                 </div>
 
@@ -242,15 +366,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
     <style>
         .modal.right .modal-dialog {
             position: fixed;
@@ -278,7 +393,7 @@
 
 
 
-    <!-- Modal -->
+    <!-- rightModal -->
     <div class="modal right fade" id="rightModal" tabindex="-1" role="dialog" aria-labelledby="rightModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -350,32 +465,64 @@
             </div>
         </div>
     </div>
-
-
-
 @endsection
 
 
 
 @section('js_footer')
-<script src="https://cdn.datatables.net/2.1.3/js/dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/2.1.3/js/dataTables.bootstrap5.min.js"></script><script>
-    $(document).ready(function() {
-        $('#tasksTable').DataTable({
-            "paging": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-            "pageLength": 10,    // Default number of rows per page
-            "columnDefs": [
-                { "orderable": false, "targets": 7 }  // Disable sorting on the 'Actions' column
-            ]
-        });
-    });
-</script>
+    <script src="https://cdn.datatables.net/2.1.3/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.3/js/dataTables.bootstrap5.min.js"></script>
     <script>
+        $(document).ready(function() {
+            $('#tasksTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "pageLength": 10, // Default number of rows per page
+                "columnDefs": [{
+                        "orderable": false,
+                        "targets": 7
+                    } // Disable sorting on the 'Actions' column
+                ]
+            });
+        });
+    </script>
+    <script>
+        function changeStatus(id, ele) {
+
+            let select = `
+            <select name="status" id="status_${id}" class="form-select" onchange="updateStatus(${id})">
+                <option value="Not Started" ${$(ele).html().trim() === "Not Started" ? "selected" : ""}>Not Started</option>
+                <option value="Assigned" ${$(ele).html().trim() === "Assigned" ? "selected" : ""}>Assigned</option>
+                <option value="In Progress" ${$(ele).html().trim() === "In Progress" ? "selected" : ""}>In Progress</option>
+                <option value="Ready For Test" ${$(ele).html().trim() === "Ready For Test" ? "selected" : ""}>Ready For Test</option>
+                <option value="Done" ${$(ele).html().trim() === "Done" ? "selected" : ""}>Done</option>
+                </select>`;
+
+            $(ele).parent().html(select);
+        }
+
+        function updateStatus(id) {
+            let status = $('#status_' + id).val();
+            $.ajax({
+                url: `{{ route('tasks.updateStatus', '') }}/${id}`,
+                type: 'post',
+                data: {
+                    status: status
+                },
+                success: function(data) {
+                    console.log('Status updated successfully:', data);
+                    $("table").load(location.href + " table ");
+
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
         // function drawerr(){
         //     $('#right_drawer').modal('show'); // For Bootstrap
         // }
@@ -443,39 +590,6 @@
         }
 
 
-        // function fillShow(id) {
-        //     $.ajax({
-        //         url: `{{ route('tasks.show', '') }}/${id}`,
-        //         type: 'get',
-        //         success: function(data) {
-
-        //             $("#showTaskModal").modal('show');
-        //             $('#nameShow').val(data.task.name || '');
-        //             $('.descriptionShow').val(data.task.description || '');
-        //             $('#priorityShow').val(data.task.priority || '');
-        //             $('#statusShow').val(data.task.status || '');
-        //             $('#projectShow').val(data.task.project_id || '');
-        //             $('#deadlineShow').val(data.task.deadline || '');
-
-        //             let userIds = data.task.user_ids || [];
-
-        //             // // Clear previous selections
-
-        //             // Set new selections
-        //             $('#assignShow option').each(function() {
-        //                 let optionValue = parseInt($(this).val());
-        //                 if (userIds.includes(optionValue)) {
-        //                     $(this).prop('selected', true);
-        //                 }
-        //             });
-        //         },
-        //         error: function(xhr, status, error) {
-        //             console.error('Form submission error:', error, xhr.responseText);
-        //         }
-        //     });
-        // }
-
-
 
         $(document).on('submit', '#addForm', function(event) {
             event.preventDefault();
@@ -490,6 +604,8 @@
                     console.log('Form submitted successfully:', response);
                     $('#addTaskModal').modal('hide');
                     $("table").load(location.href + " table ");
+
+
                     $('#addForm')[0].reset();
                     $(".trumbowyg-editor").html(null);
 
@@ -500,26 +616,7 @@
             });
         });
 
-        $(document).on('submit', '#updateForm', function(event) {
-            event.preventDefault();
 
-            var formData = $(this).serialize();
-
-            $.ajax({
-                url: $(this).attr('action'),
-                type: 'POST',
-                data: formData,
-                success: function(response) {
-                    $('#staticBackdrop').modal('hide');
-                    $("table").load(location.href + " table ");
-                    $("#updateTaskModal").modal('hide');
-
-                },
-                error: function(xhr) {
-                    console.error('Form update error:', xhr.responseText);
-                }
-            });
-        });
 
         function deleteForm(id) {
             if (confirm("Are you sure you want to delete this Task?")) {

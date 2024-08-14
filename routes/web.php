@@ -45,6 +45,8 @@ Route::middleware("auth")->group(function () {
 
     Route::get("tasks", [TaskController::class, "index"])->name("tasks.index");
     Route::get("tasks/{task}/edit", [TaskController::class, "edit"])->name("tasks.edit");
+    Route::post("tasks/updateStatus/{task}",[TaskController::class, "updateStatus"])->name("tasks.updateStatus");
+
 });
 
 

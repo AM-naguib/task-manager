@@ -29,4 +29,10 @@ class TaskController extends Controller
 
         return view("pages.tasks.edit",compact("task","projects","users"));
     }
+
+    public function updateStatus(Request $request, Task $task){
+            $task->status = $request->status;
+            $task->save();
+            return response()->json(["message" => "Status Updated"], 200);
+    }
 }
