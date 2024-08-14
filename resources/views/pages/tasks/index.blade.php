@@ -368,7 +368,7 @@
             "info": true,
             "autoWidth": false,
             "responsive": true,
-            "pageLength": 10,    // Default number of rows per page
+            "pageLength": 15,    // Default number of rows per page
             "columnDefs": [
                 { "orderable": false, "targets": 7 }  // Disable sorting on the 'Actions' column
             ]
