@@ -32,14 +32,11 @@
                                 <div class="mb-3">
                                     <label for="status" class="form-label">Task Status</label>
                                     <select name="status" id="status" class="form-select">
-                                        <option {{ $task->status == 'On Hold' ? 'selected' : '' }} value="On Hold">On Hold
-                                        </option>
-                                        <option {{ $task->status == 'In Progress' ? 'selected' : '' }} value="In Progress">
-                                            In Progress</option>
-                                        <option {{ $task->status == 'Completed' ? 'selected' : '' }} value="Completed">
-                                            Completed</option>
-                                        <option {{ $task->status == 'Cancelled' ? 'selected' : '' }} value="Cancelled">
-                                            Cancelled</option>
+                                        <option {{ $task->status == 'Not Started' ? 'selected' : '' }} value="Not Started">Not Started</option>
+                                        <option {{ $task->status == 'Assigned' ? 'selected' : '' }} value="Assigned">Assigned</option>
+                                        <option {{ $task->status == 'In Progress' ? 'selected' : '' }} value="In Progress">In Progress</option>
+                                        <option {{ $task->status == 'Ready For Test' ? 'selected' : '' }} value="Ready For Test">Ready For Test</option>
+                                        <option {{ $task->status == 'Done' ? 'selected' : '' }} value="Done">Done</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">

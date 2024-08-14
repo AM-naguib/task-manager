@@ -42,4 +42,24 @@ class AuthController extends Controller
         return redirect()->route('login')->with('message', 'You have been logged out successfully.');
     }
 
+
+
+    public function updatePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            "password" => "required"
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+        $user = auth()->user();
+        $user->password = bcrypt($request->password);
+        $user->save();
+        return response()->json([
+            'success' => true,
+            'message' => 'Password updated successfully'
+        ], 200);
+    }
 }

@@ -19,7 +19,54 @@
                         <p>All Tasks</p>
                     </div>
                     <div class="card-body p-0">
-                        <div class="table4 p-25 mb-30">
+                        <table id="tasksTable" class="table table-bordered ">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Priority</th>
+                                    <th>Project</th>
+                                    <th>Status</th>
+                                    <th>Deadline</th>
+                                    <th>Assigned Users</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($tasks as $task)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $task->name }}</td>
+                                    <td style="color: @if ($task->priority == 'High') red @elseif ($task->priority == 'Medium') #a3a300 @endif">
+                                        {{ $task->priority }}</td>
+                                    <td>{{ $task->project->name ?? '' }}</td>
+                                    <td style="color: @if ($task->status == 'Not Started') #adadad @elseif ($task->status == 'Assigned') #f90000 @elseif ($task->status == 'Ready For Test') #fbbc00 @elseif ($task->status == 'In Progress') #1103d1 @elseif ($task->status == 'Done') #5ac100 @endif">
+                                        {{ $task->status }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($task->deadline)->format('d-m-Y') }}</td>
+                                    <td>
+                                        @foreach ($task->users as $user)
+                                        <span class="p-1 bg-primary rounded text-white" style="font-size: 12px">{{ $user->name }}</span>
+                                        @endforeach
+                                    </td>
+                                    <td class="d-flex align-items-center p-4">
+                                        <button type="button" onclick="fillShow({{ $task->id }})" class="btn text-primary" data-toggle="modal"
+                                            data-target="#rightModal">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                        <a href="{{ route('tasks.edit', $task->id) }}" class="btn text-warning"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        <button class="btn text-center text-danger" onclick="deleteForm({{ $task->id }})"><i
+                                                class="fa-solid fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="8">No tasks available.</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+
+                        {{-- <div class="table4 p-25 mb-30">
 
                             <div class="table-responsive">
                                 <table class="table mb-0">
@@ -32,17 +79,20 @@
                                                 <span class="userDatatable-title">Name</span>
                                             </th>
                                             <th>
-                                                <span class="userDatatable-title">Status</span>
-                                            </th>
-                                            <th>
                                                 <span class="userDatatable-title">Priority</span>
-                                            </th>
-                                            <th>
-                                                <span class="userDatatable-title">Deadline</span>
                                             </th>
                                             <th>
                                                 <span class="userDatatable-title">Project</span>
                                             </th>
+                                            <th>
+                                                <span class="userDatatable-title">Status</span>
+                                            </th>
+
+                                            <th>
+                                                <span class="userDatatable-title">Deadline</span>
+                                            </th>
+
+
                                             <th>
                                                 <span class="userDatatable-title">Assigned To</span>
                                             </th>
@@ -57,10 +107,19 @@
 
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $task->name }}</td>
-                                                <td>{{ $task->status }}</td>
-                                                <td>{{ $task->priority }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($task->deadline)->format('d-m-Y') }}</td>
+                                                <td
+                                                    style="color:
+                                                @if ($task->priority == 'High') red
+                                                @elseif ($task->priority == 'Medium')
+                                                    #a3a300 @endif">
+                                                    {{ $task->priority }}
+                                                </td>
                                                 <td>{{ $task->project->name ?? '' }}</td>
+                                                <td
+                                                    style="color:@if ($task->status == 'Not Started') #adadad @elseif ($task->status == 'Assigned') #f90000 @elseif ($task->status == 'Ready For Test') #fbbc00 @elseif ($task->status == 'In Progress') #1103d1 @elseif ($task->status == 'Done') #5ac100 @endif">
+                                                    {{ $task->status }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($task->deadline)->format('d-m-Y') }}</td>
+
                                                 <td>
                                                     @foreach ($task->users as $user)
                                                         <span class="p-1 bg-primary rounded text-white"
@@ -68,23 +127,19 @@
                                                     @endforeach
                                                 </td>
 
-                                                <td class="d-flex  gap-2">
+                                                <td class="d-flex align-items-center p-4 ">
                                                     <button type="button" onclick="fillShow({{ $task->id }})"
-                                                        class="btn btn-primary" data-toggle="modal"
+                                                        class="btn text-primary" data-toggle="modal"
                                                         data-target="#rightModal">
-                                                        View
+                                                        <i class="fa-solid fa-eye"></i>
                                                     </button>
-                                                    {{-- <button class="btn btn-primary"
-                                                        onclick="fillShow({{ $task->id }})">View</button> --}}
-                                                    <a href="{{ route('tasks.edit', $task->id) }}"
-                                                        class="btn btn-warning">Update Task</a>
-                                                    {{-- <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                                        onclick="fillUpdateForm({{ $task->id }})">
-                                                        Update Task
-                                                    </button> --}}
 
-                                                    <button class="btn btn-danger"
-                                                        onclick="deleteForm({{ $task->id }})">Delete</button>
+                                                    <a href="{{ route('tasks.edit', $task->id) }}"
+                                                        class="btn text-warning"><i class="fa-solid fa-pen-to-square"></i></a>
+
+
+                                                    <button class="btn text-center text-danger"
+                                                        onclick="deleteForm({{ $task->id }})"><i class="fa-solid fa-trash"></i></button>
 
                                                 @empty
                                         @endforelse
@@ -94,7 +149,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 
@@ -102,6 +157,7 @@
 
         </div>
     </div>
+
 
 
 
@@ -133,10 +189,11 @@
                         <div class="mb-3">
                             <label for="status" class="form-label">Task Status</label>
                             <select name="status" id="status" class="form-select">
-                                <option value="On Hold">On Hold</option>
+                                <option value="Not Started">Not Started</option>
+                                <option value="Assigned">Assigned</option>
                                 <option value="In Progress">In Progress</option>
-                                <option value="Completed">Completed</option>
-                                <option value="Cancelled">Cancelled</option>
+                                <option value="Ready For Test">Ready For Test</option>
+                                <option value="Done">Done</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -166,84 +223,7 @@
                                 <div class="reply-form pt-0">
                                     <div class="mailCompose-form-content">
                                         <div class="form-group">
-                                            <textarea name="description" id="mail-reply-message" class="form-control-lg negoss" placeholder="Type your message..."></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Update Task Modal -->
-    <div class="modal fade" id="updateTaskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="updateTaskModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="updateTaskModalLabel">Update Project</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" id="updateForm">
-                        @csrf
-                        @method('put')
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Task Name</label>
-                            <input type="text" class="form-control" id="name" name="name">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="priority" class="form-label">Task Priority</label>
-                            <select name="priority" id="priority" class="form-select">
-                                <option value="Low">Low</option>
-                                <option value="Medium">Medium</option>
-                                <option value="High">High</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="status" class="form-label">Task Status</label>
-                            <select name="status" id="status" class="form-select">
-                                <option value="On Hold">On Hold</option>
-                                <option value="In Progress">In Progress</option>
-                                <option value="Completed">Completed</option>
-                                <option value="Cancelled">Cancelled</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="project" class="form-label">Project</label>
-                            <select name="project_id" id="project" class="form-select">
-                                @foreach ($projects as $project)
-                                    <option value="{{ $project->id }}">{{ $project->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="assign" class="form-label">Assign To</label>
-                            <select name="users[]" id="assign" class="form-select" multiple>
-                                @foreach ($users as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="deadline" class="form-label">Task Deadline</label>
-                            <input type="text" id="datepicker" name="deadline" class="form-control"
-                                placeholder="Select a date">
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="bg-white mb-25 rounded-xl">
-                                <div class="reply-form pt-0">
-                                    <div class="mailCompose-form-content">
-                                        <div class="form-group">
-                                            <textarea name="description" id="mail-reply-message3" class="form-control-lg description"
+                                            <textarea name="description" id="mail-reply-message" class="form-control-lg negoss"
                                                 placeholder="Type your message..."></textarea>
                                         </div>
                                     </div>
@@ -264,78 +244,6 @@
 
 
 
-
-    {{-- <div class="modal fade" id="showTaskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="showTaskModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="showTaskModalLabel">show Project</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Task Name</label>
-                        <input type="text" class="form-control" id="nameShow" readonly>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="priority" class="form-label">Task Priority</label>
-                        <select id="priorityShow" class="form-select">
-                            <option value="Low">Low</option>
-                            <option value="Medium">Medium</option>
-                            <option value="High">High</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="status" class="form-label">Task Status</label>
-                        <select id="statusShow" class="form-select">
-                            <option value="On Hold">On Hold</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Completed">Completed</option>
-                            <option value="Cancelled">Cancelled</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="project" class="form-label">Project</label>
-                        <select id="projectShow" class="form-select">
-                            @foreach ($projects as $project)
-                                <option value="{{ $project->id }}">{{ $project->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="assign" class="form-label">Assign To</label>
-                        <select id="assignShow" class="form-select" multiple>
-                            @foreach ($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="deadline" class="form-label">Task Deadline</label>
-                        <input type="text" id="deadlineShow" class="form-control" placeholder="Select a date">
-                    </div>
-                    <div class="col-lg-12">
-                        <div class="bg-white mb-25 rounded-xl">
-                            <div class="reply-form pt-0">
-                                <div class="mailCompose-form-content">
-                                    <div class="form-group">
-                                        <textarea id="mail-reply-message3" class="form-control-lg descriptionShow" placeholder="Type your message..."></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> --}}
 
 
 
@@ -450,6 +358,23 @@
 
 
 @section('js_footer')
+<script src="https://cdn.datatables.net/2.1.3/js/dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.3/js/dataTables.bootstrap5.min.js"></script><script>
+    $(document).ready(function() {
+        $('#tasksTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+            "pageLength": 10,    // Default number of rows per page
+            "columnDefs": [
+                { "orderable": false, "targets": 7 }  // Disable sorting on the 'Actions' column
+            ]
+        });
+    });
+</script>
     <script>
         // function drawerr(){
         //     $('#right_drawer').modal('show'); // For Bootstrap

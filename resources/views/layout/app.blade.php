@@ -18,23 +18,27 @@
             </aside>
         </div>
         <div class="contents">
+
             <div class="modal fade" id="changePass" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">تغيير كلمة السر</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="">
+                            <form id="password-form" action="">
+                                <div id="errorPass" class="text-danger">
+
+                                </div>
                                 <div class="mb-3">
-                                    <label for="recipient-name" class="col-form-label">كلمة المرور الجديدة</label>
+                                    <label for="new-password" class="col-form-label">New Password</label>
                                     <input type="password" class="form-control" id="new-password" name="password">
                                 </div>
                                 <div class="mb-3">
-                                    <button class="btn btn-primary">تغيير</button>
+                                    <button type="submit" class="btn btn-primary">Save</button>
                                 </div>
                             </form>
                         </div>
@@ -43,24 +47,37 @@
             </div>
             <script>
                 $(document).ready(function() {
-                    $('#changePass form').on('submit', function(event) {
-                        event.preventDefault();
-                        var formData = {
-                            password: $('#new-password').val()
-                        };
-                        $.ajax({
-                            url: $(this).attr('action'),
-                            type: 'POST',
-                            data: formData,
-                            success: function(response) {
+                    $('#password-form').on('submit', function(e) {
+                        e.preventDefault();
 
-                                $("#changePass").modal('hide');
-                                console.log(response);
+                        var password = $('#new-password').val();
+
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{ route('update-password') }}",
+                            data: {
+                                password: password
+                            },
+                            success: function(response) {
+                                $("#changePass").modal("hide")
+                                $('#password-form')[0].reset();
+
+
+                            },
+                            error: function(xhr, status, error) {
+                                let res = JSON.parse(xhr.responseText)
+
+                                $("#errorPass").html(res.errors.password[0]);
+                                setTimeout(() => {
+                                $("#errorPass").html("");
+                                }, 5000);
+
                             }
                         });
                     });
                 });
-                </script>
+            </script>
+
             @yield('content')
         </div>
         <footer class="footer-wrapper">

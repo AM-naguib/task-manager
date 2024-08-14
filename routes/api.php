@@ -31,8 +31,11 @@ Route::controller(AuthController::class)->prefix("auth")->group(function () {
     Route::post("/logout", "logout")->middleware("auth:sanctum");
 });
 
+Route::prefix("tasks")->name("tasks.")->controller(TaskController::class)->group(function () {
+    Route::get("/", "index")->name("api.index");
+});
 
-// Route::middleware("auth")->group(function () {
+// Route::middleware("auth:")->group(function () {
 
 //     Route::prefix("projects")->name("projects.")->controller(ProjectController::class)->group(function () {
 //         Route::get("/", "index")->name("index");
@@ -43,8 +46,6 @@ Route::controller(AuthController::class)->prefix("auth")->group(function () {
 //     });
 
 
-//     Route::prefix("tasks")->name("tasks.")->controller(TaskController::class)->group(function () {
-//         Route::get("/", "index")->name("api.index");
 //         Route::post("/", "store")->name("store");
 //         Route::put("/{task}", "update")->name("update");
 //         Route::delete("/{task}", "destroy")->name("update");
