@@ -25,7 +25,7 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-
+        
         $request["created_by"]= auth()->user()->id;
         $validator = Validator::make($request->all(), [
             "name" => "required",

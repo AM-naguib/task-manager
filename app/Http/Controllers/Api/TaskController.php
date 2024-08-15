@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\Task;
+use App\Events\TaskCreated;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -44,6 +45,7 @@ class TaskController extends Controller
 
             $task = Task::create($data);
             $task->users()->attach($request->users);
+            event(new TaskCreated($task));
             return response()->json([
             "message" => "Task created",
             "task" => $task,

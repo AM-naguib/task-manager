@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Project;
+use App\Events\StatusUpdate;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -33,6 +34,9 @@ class TaskController extends Controller
     public function updateStatus(Request $request, Task $task){
             $task->status = $request->status;
             $task->save();
+            if($task->status == "Ready For Test"){
+                event(new StatusUpdate($task));
+            }
             return response()->json(["message" => "Status Updated"], 200);
     }
 }
