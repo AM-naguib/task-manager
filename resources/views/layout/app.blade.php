@@ -126,6 +126,49 @@
     @yield('js_footer')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @stack('scripts')
+
+    <script>
+    // دالة لضبط محاذاة النص بناءً على الحرف الأول
+function adjustTextAlign(input) {
+    const value = input.value.trim();
+    if (!value) return;
+    const firstChar = value.charAt(0);
+    if (/[\u0600-\u06FF]/.test(firstChar)) {
+        input.style.direction = 'rtl';
+        input.style.textAlign = 'right';
+    } else {
+        input.style.direction = 'ltr';
+        input.style.textAlign = 'left';
+    }
+}
+
+// تطبيق الدالة على جميع حقول النصوص الحالية
+document.querySelectorAll('input[type="text"], textarea').forEach(input => {
+    input.addEventListener('input', () => adjustTextAlign(input));
+});
+
+// مراقبة أي إضافات جديدة للحقول النصية
+const observer = new MutationObserver(function(mutationsList, observer) {
+    for (let mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+            mutation.addedNodes.forEach(node => {
+                if (node.querySelectorAll) {
+                    node.querySelectorAll('input[type="text"], textarea').forEach(input => {
+                        input.addEventListener('input', () => adjustTextAlign(input));
+                    });
+                }
+            });
+        }
+    }
+});
+
+// مراقبة العناصر الموجودة داخل الـ body
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
+});
+
+    </script>
 </body>
 
 </html>

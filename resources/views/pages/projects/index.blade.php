@@ -69,14 +69,13 @@
                                                         <i class="fa-solid fa-eye m-0 fs-5"></i>
                                                     </button>
                                                     <button id="btn-edit" onclick="insertForm('edit',{{ $project->id }})"
-                                                        type="button" class="border-0 bg-transparent text-info" data-bs-toggle="modal"
-                                                        data-bs-target="#staticBackdrop">
-                                                        <i
-                                                    class="fa-solid fa-pen-to-square m-0 fs-5"></i>
+                                                        type="button" class="border-0 bg-transparent text-info"
+                                                        data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                        <i class="fa-solid fa-pen-to-square m-0 fs-5"></i>
                                                     </button>
                                                     <button class="border-0 bg-transparent text-center text-danger"
                                                         onclick="deleteForm({{ $project->id }})"><i
-                                                        class="fa-solid fa-trash m-0 fs-5"></i></button>
+                                                            class="fa-solid fa-trash m-0 fs-5"></i></button>
                                                 @empty
                                         @endforelse
 
@@ -187,6 +186,7 @@
 
 
 @section('js_footer')
+
     <script>
         function fillShow(id) {
             $.ajax({
@@ -200,15 +200,15 @@
             })
         }
 
-        function showFiles(files){
+        function showFiles(files) {
 
             let html = ``;
             files.forEach(item => {
-                html +=`                                    <div class="mb-20">
+                html += `                                    <div class="mb-20">
                                         <div class="files-area d-flex justify-content-between align-items-center" id="">
                                             <div class="files-area__left d-flex align-items-center">
                                                 <div class="files-area__img">
-                                                    <img src="{{asset("file-icone.png")}}" alt="img" class="wh-42">
+                                                    <img src="{{ asset('file-icone.png') }}" alt="img" class="wh-42">
                                                 </div>
                                                 <div class="files-area__title">
                                                     <p class="mb-0 fs-14 fw-500 color-dark text-capitalize">${item.file_description}
@@ -393,6 +393,10 @@
                 })
             }
         }
+        jQuery(document).ready(function($) {
+            $("#datepicker").datepicker();
+        });
     </script>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-@endsection
+@endsection 
