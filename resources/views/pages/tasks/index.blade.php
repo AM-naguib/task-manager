@@ -60,9 +60,11 @@
                                         <td>
                                             @php
                                                 try {
-                                                    $formattedDate = \Carbon\Carbon::parse($task->deadline)->format('d-m-Y');
+                                                    $formattedDate = \Carbon\Carbon::parse($task->deadline)->format(
+                                                        'd-m-Y',
+                                                    );
                                                 } catch (\Exception $e) {
-                                                    $formattedDate =  $task->deadline;
+                                                    $formattedDate = $task->deadline;
                                                 }
                                             @endphp
                                             {{ $formattedDate }}
@@ -360,7 +362,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="deadline" class="form-label">Task Deadline</label>
-                            <input autocomplete="off" type="text" id="datepicker"  name="deadline"
+                            <input autocomplete="off" type="text" id="datepicker" name="deadline"
                                 class="form-control" placeholder="Select a date">
                         </div>
                         <div class="col-lg-12">
@@ -492,6 +494,7 @@
 @section('js_footer')
     <script src="https://cdn.datatables.net/2.1.3/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.3/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
             $('#tasksTable').DataTable({
@@ -510,6 +513,19 @@
         });
     </script>
     <script>
+        const url = new URL(window.location.href);
+
+        const taskId = url.searchParams.get("taskId");
+        if (taskId != null) {
+            fillShow(taskId)
+            $('#rightModal').modal('show');
+        }
+
+
+
+
+
+
         function changeStatus(id, ele) {
             let select = `
             <select name="status" id="status_${id}" class="form-select" onchange="updateStatus(${id})">
