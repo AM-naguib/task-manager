@@ -60,7 +60,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="deadline" class="form-label">Task Deadline</label>
-                                    <input autocomplete="off" type="text" id="datepicker" name="deadline" class="form-control"
+                                    <input autocomplete="off" type="date" id="datepicker" name="deadline" class="form-control"
                                         placeholder="Select a date" value="{{ $task->deadline }}">
                                 </div>
                                 <div class="col-lg-12">

@@ -57,7 +57,16 @@
                                         </td>
 
 
-                                        <td>{{ \Carbon\Carbon::parse($task->deadline)->format('d-m-Y') }}</td>
+                                        <td>
+                                            @php
+                                                try {
+                                                    $formattedDate = \Carbon\Carbon::parse($task->deadline)->format('d-m-Y');
+                                                } catch (\Exception $e) {
+                                                    $formattedDate =  $task->deadline;
+                                                }
+                                            @endphp
+                                            {{ $formattedDate }}
+                                        </td>
                                         <td>
                                             @foreach ($task->users as $user)
                                                 <span class="p-1 bg-primary rounded text-white"

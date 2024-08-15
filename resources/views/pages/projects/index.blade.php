@@ -59,7 +59,16 @@
                                                 <td>{{ $project->name }}</td>
                                                 <td>{{ $project->status }}</td>
                                                 <td>{{ $project->priority }}</td>
-                                                <td>{{ $project->deadline }}</td>
+                                                <td>
+                                                    @php
+                                                        try {
+                                                            $formattedDate = \Carbon\Carbon::parse($project->deadline)->format('d-m-Y');
+                                                        } catch (\Exception $e) {
+                                                            $formattedDate =  $project->deadline;
+                                                        }
+                                                    @endphp
+                                                    {{ $formattedDate }}
+                                                </td>
                                                 <td>{{ $project->createdBy->name }}</td>
 
                                                 <td class="d-flex  gap-2">
@@ -399,4 +408,4 @@
     </script>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-@endsection 
+@endsection
