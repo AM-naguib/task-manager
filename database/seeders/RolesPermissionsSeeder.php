@@ -50,9 +50,13 @@ class RolesPermissionsSeeder extends Seeder
             'password' => Hash::make('password')
         ]);
         $role = Role::create(['name' => 'Admin']);
+        $user = User::find(1);
+        $role2 = Role::create(['name' => 'hiii']);
         $permissions = Permission::pluck('id', 'id')->all();
         $role->syncPermissions($permissions);
+        $role2->syncPermissions($permissions);
         $user->assignRole([$role->id]);
+        $user->assignRole([$role2->id]);
 
     }
 }

@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\UserController as ApiUserController;
 use App\Http\Controllers\ProjectController  as ProjectController;
 use App\Http\Controllers\Api\CommentController as ApiCommentController;
 use App\Http\Controllers\Api\ProjectController as ApiProjectController;
+use App\Http\Controllers\UserController as UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,10 +43,12 @@ Route::middleware("auth")->group(function () {
     Route::get('projects/document/{project}', [ProjectController::class, 'projectDocument'])->name('projects.document');
 
 
-
     Route::get("tasks", [TaskController::class, "index"])->name("tasks.index");
     Route::get("tasks/{task}/edit", [TaskController::class, "edit"])->name("tasks.edit");
     Route::post("tasks/updateStatus/{task}",[TaskController::class, "updateStatus"])->name("tasks.updateStatus");
+
+
+    Route::get("users/", [UserController::class, "index"])->name("users.index");
 
 });
 

@@ -34,11 +34,11 @@
                             </thead>
                             <tbody>
                                 @forelse ($tasks as $task)
-                    @php
-                        // Regular expression to match Arabic letters
-                        $arabicRegex = '/^[\x{0600}-\x{06FF}]/u';
-                        $direction = preg_match($arabicRegex, $task->name) ? 'rtl' : 'ltr';
-                    @endphp
+                                    @php
+                                        // Regular expression to match Arabic letters
+                                        $arabicRegex = '/^[\x{0600}-\x{06FF}]/u';
+                                        $direction = preg_match($arabicRegex, $task->name) ? 'rtl' : 'ltr';
+                                    @endphp
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td style="direction: {{ $direction }};">{{ $task->name }}</td>

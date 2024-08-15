@@ -29,7 +29,12 @@
                 <span class="menu-text">Documents</span>
             </a>
         </li>
-
+        <li>
+            <a href="{{ route('users.index') }}">
+                <span class="nav-icon uil uil-create-dashboard"></span>
+                <span class="menu-text">Users</span>
+            </a>
+        </li>
 
 
 

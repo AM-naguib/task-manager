@@ -18,13 +18,14 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
 
         $validator = Validator::make($request->all(), [
             "name" => ["required"],
             "email" => ["required", "unique:users,email", "email"],
             "username" => ["required", "unique:users,username"],
             "password" => ["required"],
-            "role_id" => ["required", "exists:roles,id"],
+            "roles" => ["required", "array"],
         ]);
 
         if ($validator->fails()) {
@@ -35,8 +36,10 @@ class UserController extends Controller
             $data = $validator->validated();
             $data["password"] = bcrypt($data["password"]);
             $user = User::create($data);
-            $role = Role::find($request["role_id"]);
-            $user->assignRole([$role->id]);
+            foreach ($data["roles"] as $role_id) {
+                $role = Role::find($role_id);
+                $user->assignRole([$role->id]);
+            }
             return response()->json(["message" => "User Created", "user" => $user, "role" => $role], 201);
         } catch (\Exception $e) {
             return response()->json(["message" => $e->getMessage()], 500);
@@ -48,7 +51,7 @@ class UserController extends Controller
     {
         $roles = $user->getRoleNames();
         return response()->json([
-            "user" => $user->only(['id', 'name', 'email', 'username', 'email_verified_at', 'created_at', 'updated_at']),
+            "user" => $user->only(['id', 'name', 'email', 'username']),
             "roles" => $roles
         ], 200);
     }
@@ -56,12 +59,13 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
+
         $validator = Validator::make($request->all(), [
             "name" => ["required"],
             "email" => "required|email|unique:users,email," . $user->id,
             "username" => "required|unique:users,username," . $user->id,
             "password" => ["nullable"],
-            "role_id" => ["required", "exists:roles,id"],
+            "roles" => ["required", "array"],
         ]);
 
         if ($validator->fails()) {
@@ -76,8 +80,12 @@ class UserController extends Controller
                 unset($data["password"]);
             }
             $user->update($data);
-            $role = Role::find($request["role_id"]);
-            $user->assignRole([$role->id]);
+
+            foreach ($data["roles"] as $role_id) {
+                $role = Role::find($role_id);
+                $user->assignRole([$role->id]);
+            }
+
             return response()->json(["message" => "User Updated", "user" => $user, "role" => $role], 200);
         } catch (\Exception $e) {
             return response()->json(["message" => $e->getMessage()], 500);
