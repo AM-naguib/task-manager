@@ -57,14 +57,16 @@
 
                                                 </td>
 
-                                                <td class="d-flex  gap-2">
+                                                <td class="d-flex  align-items-center gap-3">
                                                     <button id="btn-edit" onclick="insertForm('edit',{{ $user->id }})"
-                                                        type="button" class="btn btn-info" data-bs-toggle="modal"
+                                                        type="button" class="border-0 bg-transparent text-info" data-bs-toggle="modal"
                                                         data-bs-target="#staticBackdrop">
-                                                        Edit
+                                                        <i
+                                                    class="fa-solid fa-pen-to-square m-0 fs-5"></i>
                                                     </button>
-                                                    <button class="btn btn-danger"
-                                                        onclick="deleteForm({{ $user->id }})">Delete</button>
+                                                    <button class="border-0 bg-transparent text-danger"
+                                                        onclick="deleteForm({{ $user->id }})"><i
+                                                        class="fa-solid fa-trash m-0 fs-5"></i></button>
                                                 @empty
                                         @endforelse
                                     </tbody>
@@ -86,7 +88,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Project</h1>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">User</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

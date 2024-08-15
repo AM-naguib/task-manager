@@ -64,17 +64,19 @@
 
                                                 <td class="d-flex  gap-2">
                                                     <button type="button" onclick="fillShow({{ $project->id }})"
-                                                        class="btn btn-primary" data-toggle="modal"
+                                                        class="border-0 bg-transparent text-primary" data-toggle="modal"
                                                         data-target="#rightModal">
-                                                        View
+                                                        <i class="fa-solid fa-eye m-0 fs-5"></i>
                                                     </button>
                                                     <button id="btn-edit" onclick="insertForm('edit',{{ $project->id }})"
-                                                        type="button" class="btn btn-info" data-bs-toggle="modal"
+                                                        type="button" class="border-0 bg-transparent text-info" data-bs-toggle="modal"
                                                         data-bs-target="#staticBackdrop">
-                                                        Edit
+                                                        <i
+                                                    class="fa-solid fa-pen-to-square m-0 fs-5"></i>
                                                     </button>
-                                                    <button class="btn btn-danger"
-                                                        onclick="deleteForm({{ $project->id }})">Delete</button>
+                                                    <button class="border-0 bg-transparent text-center text-danger"
+                                                        onclick="deleteForm({{ $project->id }})"><i
+                                                        class="fa-solid fa-trash m-0 fs-5"></i></button>
                                                 @empty
                                         @endforelse
 

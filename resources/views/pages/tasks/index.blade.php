@@ -64,16 +64,16 @@
                                                     style="font-size: 12px">{{ $user->name }}</span>
                                             @endforeach
                                         </td>
-                                        <td class="d-flex align-items-center p-4">
+                                        <td class="d-flex align-items-center gap-3">
                                             <button type="button" onclick="fillShow({{ $task->id }})"
-                                                class="btn text-primary" data-toggle="modal" data-target="#rightModal">
-                                                <i class="fa-solid fa-eye"></i>
+                                                class="border-0 bg-transparent text-primary" data-toggle="modal" data-target="#rightModal">
+                                                <i class="fa-solid fa-eye m-0 fs-5"></i>
                                             </button>
-                                            <a href="{{ route('tasks.edit', $task->id) }}" class="btn text-warning"><i
-                                                    class="fa-solid fa-pen-to-square"></i></a>
-                                            <button class="btn text-center text-danger"
+                                            <a href="{{ route('tasks.edit', $task->id) }}" class="border-0 bg-transparent text-warning"><i
+                                                    class="fa-solid fa-pen-to-square m-0 fs-5"></i></a>
+                                            <button class="border-0 bg-transparent text-center text-danger "
                                                 onclick="deleteForm({{ $task->id }},this)"><i
-                                                    class="fa-solid fa-trash"></i></button>
+                                                    class="fa-solid fa-trash m-0 fs-5"></i></button>
                                         </td>
                                     </tr>
                                 @empty

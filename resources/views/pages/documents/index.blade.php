@@ -32,7 +32,7 @@
                                                 <span class="userDatatable-title">Project Name</span>
                                             </th>
                                             <th>
-                                                <span class="userDatatable-title">Name</span>
+                                                <span class="userDatatable-title">Action</span>
                                             </th>
 
                                         </tr>
@@ -44,19 +44,22 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $doc->project->name ?? 'No Project' }}</td>
 
-                                                <td class="d-flex  gap-2">
+                                                <td class="d-flex align-items-center gap-3">
                                                     <button type="button" onclick="fillShow({{ $doc->id }})"
-                                                        class="btn btn-primary" data-toggle="modal"
+                                                        class="border-0 bg-transparent text-primary" data-toggle="modal"
                                                         data-target="#rightModal">
-                                                        View
+                                                        <i class="fa-solid fa-eye m-0 fs-5"></i>
+
                                                     </button>
 
                                                     <a href="{{ route('documents.edit', $doc->id) }}"
-                                                        class="btn btn-warning">Update Document</a>
+                                                        class="border-0 bg-transparent text-warning"><i
+                                                        class="fa-solid fa-pen-to-square m-0 fs-5"></i></a>
 
 
-                                                    <button class="btn btn-danger"
-                                                        onclick="deleteDoc({{ $doc->id }})">Delete</button>
+                                                    <button class="border-0 bg-transparent text-danger"
+                                                        onclick="deleteDoc({{ $doc->id }})"><i
+                                                        class="fa-solid fa-trash m-0 fs-5"></i></button>
 
                                                 @empty
                                         @endforelse
@@ -150,6 +153,8 @@
 @section('js_footer')
     <script>
         function deleteDoc(id) {
+            if (confirm("Are you sure you want to delete this document?")) {
+
             $.ajax({
                 url: `{{ route('documents.destroy', '') }}/${id}`,
                 type: 'DELETE',
@@ -166,6 +171,7 @@
                 }
             });
         }
+        }
 
 
         function fillShow(id) {
@@ -181,7 +187,7 @@
         }
 
         function showFiles(files) {
-            
+
             let html = ``;
             files.forEach(item => {
                 html += `                                    <div class="mb-20">
