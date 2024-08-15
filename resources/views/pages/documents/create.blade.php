@@ -38,9 +38,9 @@
                                     <div class="mb-3">
                                         <label for="name" class="form-label">File Description</label>
                                         <div class="file-info d-flex gap-5">
-                                            <input type="text" class="form-control" id="name" name="file_description[]"
+                                            <input autocomplete="off" type="text" class="form-control" id="name" name="file_description[]"
                                                 value="{{ old('name') }}">
-                                            <input type="file" id="file" name="files[]" class="form-control">
+                                            <input autocomplete="off" type="file" id="file" name="files[]" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -79,9 +79,9 @@
             return ` <div class="mb-3">
                                         <label for="name" class="form-label">File Description</label>
                                         <div class="file-info d-flex gap-5">
-                                            <input type="text" class="form-control" id="name" name="file_description[]"
+                                            <input autocomplete="off" type="text" class="form-control" id="name" name="file_description[]"
                                                 value="{{ old('name') }}">
-                                            <input type="file" id="file" name="files[]" class="form-control">
+                                            <input autocomplete="off" type="file" id="file" name="files[]" class="form-control">
                                         </div>
                                     </div>`
         }

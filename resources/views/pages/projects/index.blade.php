@@ -251,7 +251,7 @@
             @method('put')
             <div class="mb-3">
                 <label for="name" class="form-label">Project Name</label>
-                <input type="text" class="form-control" id="name" name="name" value="${data.name}">
+                <input autocomplete="off" type="text" class="form-control" id="name" name="name" value="${data.name}">
             </div>
             <div class="mb-3">
                 <label for="summary" class="form-label">Project Summary</label>
@@ -280,7 +280,7 @@
             </div>
             <div class="mb-3">
                 <label for="deadline" class="form-label">Project Deadline</label>
-                <input type="text" id="datepicker" class="form-control" placeholder="Select a date" name="deadline" value="${data.deadline}">
+                <input autocomplete="off" type="text" id="datepicker" class="form-control" placeholder="Select a date" name="deadline" value="${data.deadline}">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -296,7 +296,7 @@
                 @csrf
                 <div class="mb-3">
                     <label for="name" class="form-label">Project Name</label>
-                    <input type="text" class="form-control" id="name" name="name">
+                    <input autocomplete="off" type="text" class="form-control" id="name" name="name">
                 </div>
                 <div class="mb-3">
                     <label for="summary" class="form-label">Project Summary</label>
@@ -325,7 +325,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="deadline" class="form-label">Project Deadline</label>
-                    <input type="text" id="datepicker" name="deadline" class="form-control" placeholder="Select a date">
+                    <input autocomplete="off" type="text" id="datepicker" name="deadline" class="form-control" placeholder="Select a date">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

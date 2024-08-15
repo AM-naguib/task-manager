@@ -133,19 +133,19 @@
             @method('put')
                <div class="mb-3">
                             <label for="name" class="form-label required">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" value="${data.user.name}" required autocomplete="off">
+                            <input autocomplete="off"type="text" class="form-control" id="name" name="name" value="${data.user.name}" required autocomplete="off">
                         </div>
                         <div class="mb-3">
                             <label for="username" class="form-label required">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" value="${data.user.username}" required autocomplete="off">
+                            <input autocomplete="off"type="text" class="form-control" id="username" name="username" value="${data.user.username}" required autocomplete="off">
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label required">email</label>
-                            <input type="text" class="form-control" id="email" name="email" value="${data.user.email}" required autocomplete="off">
+                            <input autocomplete="off"type="text" class="form-control" id="email" name="email" value="${data.user.email}" required autocomplete="off">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label required">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" autocomplete="off">
+                            <input autocomplete="off"type="password" class="form-control" id="password" name="password" autocomplete="off">
                         </div>
                         <div class="mb-3">
                             <label for="roles" class="form-label required">Roles</label>
@@ -171,19 +171,19 @@
                         @csrf
                         <div class="mb-3">
                             <label for="name" class="form-label required">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
+                            <input autocomplete="off"type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="mb-3">
                             <label for="username" class="form-label required">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" required>
+                            <input autocomplete="off"type="text" class="form-control" id="username" name="username" required>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label required">email</label>
-                            <input type="text" class="form-control" id="email" name="email" required>
+                            <input autocomplete="off"type="text" class="form-control" id="email" name="email" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label required">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
+                            <input autocomplete="off"type="password" class="form-control" id="password" name="password" required>
                         </div>
                         <div class="mb-3">
                             <label for="roles" class="form-label required">Roles</label>

@@ -304,7 +304,7 @@
                         @csrf
                         <div class="mb-3">
                             <label for="name" class="form-label">Task Name</label>
-                            <input type="text" class="form-control" id="name" name="name">
+                            <input autocomplete="off" type="text" class="form-control" id="name" name="name">
                         </div>
                         <div class="mb-3">
                             <label for="priority" class="form-label">Task Priority</label>
@@ -343,7 +343,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="deadline" class="form-label">Task Deadline</label>
-                            <input type="text" id="datepicker" name="deadline" class="form-control"
+                            <input autocomplete="off" type="text" id="datepicker" name="deadline" class="form-control"
                                 placeholder="Select a date">
                         </div>
                         <div class="col-lg-12">
