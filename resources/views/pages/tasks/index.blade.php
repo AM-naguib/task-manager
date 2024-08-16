@@ -19,83 +19,76 @@
                         <p class="m-0">All Tasks</p>
                     </div>
                     <div class="card-body">
-                        <table id="tasksTable" class="table table-bordered ">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Name</th>
-                                    <th>Priority</th>
-                                    <th>Project</th>
-                                    <th>Status</th>
-                                    <th>Deadline</th>
-                                    <th>Assigned Users</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($tasks as $task)
-                                    @php
-                                        // Regular expression to match Arabic letters
-                                        $arabicRegex = '/^[\x{0600}-\x{06FF}]/u';
-                                        $direction = preg_match($arabicRegex, $task->name) ? 'rtl' : 'ltr';
-                                    @endphp
+                        <div class="table-responsive">
+                            <table id="tasksTable" class="table table-bordered">
+                                <thead>
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td style="direction: {{ $direction }};">{{ $task->name }}</td>
-                                        <td
-                                            style="color: @if ($task->priority == 'High') red @elseif ($task->priority == 'Medium') #a3a300 @endif">
-                                            {{ $task->priority }}</td>
-                                        <td>{{ $task->project->name ?? '' }}</td>
-                                        <td
-                                            style="color: @if ($task->status == 'Not Started') #adadad
-                                                   @elseif ($task->status == 'Assigned') #f90000
-                                                   @elseif ($task->status == 'Ready For Test') #fbbc00
-                                                   @elseif ($task->status == 'In Progress') #1103d1
-                                                   @elseif ($task->status == 'Done') #5ac100 @endif">
-                                            <p class="m-0" onclick="changeStatus({{ $task->id }}, this)">
-                                                {{ $task->status }}</p>
-                                        </td>
-
-
-                                        <td>
-                                            @php
-                                                try {
-                                                    $formattedDate = \Carbon\Carbon::parse($task->deadline)->format(
-                                                        'd-m-Y',
-                                                    );
-                                                } catch (\Exception $e) {
-                                                    $formattedDate = $task->deadline;
-                                                }
-                                            @endphp
-                                            {{ $formattedDate }}
-                                        </td>
-                                        <td>
-                                            @foreach ($task->users as $user)
-                                                <span class="p-1 bg-primary rounded text-white"
-                                                    style="font-size: 12px">{{ $user->name }}</span>
-                                            @endforeach
-                                        </td>
-                                        <td class="d-flex align-items-center gap-3">
-                                            <button type="button" onclick="fillShow({{ $task->id }})"
-                                                class="border-0 bg-transparent text-primary" data-toggle="modal"
-                                                data-target="#rightModal">
-                                                <i class="fa-solid fa-eye m-0 fs-5"></i>
-                                            </button>
-                                            <a href="{{ route('tasks.edit', $task->id) }}"
-                                                class="border-0 bg-transparent text-warning"><i
-                                                    class="fa-solid fa-pen-to-square m-0 fs-5"></i></a>
-                                            <button class="border-0 bg-transparent text-center text-danger "
-                                                onclick="deleteForm({{ $task->id }},this)"><i
-                                                    class="fa-solid fa-trash m-0 fs-5"></i></button>
-                                        </td>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                        <th>Priority</th>
+                                        <th>Project</th>
+                                        <th>Status</th>
+                                        <th>Deadline</th>
+                                        <th>Assigned Users</th>
+                                        <th>Actions</th>
                                     </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="8">No tasks available.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @forelse ($tasks as $task)
+                                        @php
+                                            // Regular expression to match Arabic letters
+                                            $arabicRegex = '/^[\x{0600}-\x{06FF}]/u';
+                                            $direction = preg_match($arabicRegex, $task->name) ? 'rtl' : 'ltr';
+                                        @endphp
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td style="direction: {{ $direction }}; word-wrap: break-word;">{{ $task->name }}</td>
+                                            <td style="color: @if ($task->priority == 'High') red @elseif ($task->priority == 'Medium') #a3a300 @endif">
+                                                {{ $task->priority }}
+                                            </td>
+                                            <td>{{ $task->project->name ?? '' }}</td>
+                                            <td style="color: @if ($task->status == 'Not Started') #adadad @elseif ($task->status == 'Assigned') #f90000 @elseif ($task->status == 'Ready For Test') #fbbc00 @elseif ($task->status == 'In Progress') #1103d1 @elseif ($task->status == 'Done') #5ac100 @endif">
+                                                <p class="m-0" onclick="changeStatus({{ $task->id }}, this)">
+                                                    {{ $task->status }}
+                                                </p>
+                                            </td>
+                                            <td>
+                                                @php
+                                                    try {
+                                                        $formattedDate = \Carbon\Carbon::parse($task->deadline)->format('d-m-Y');
+                                                    } catch (\Exception $e) {
+                                                        $formattedDate = $task->deadline;
+                                                    }
+                                                @endphp
+                                                {{ $formattedDate }}
+                                            </td>
+                                            <td>
+                                                @foreach ($task->users as $user)
+                                                    <span class="p-1 bg-primary rounded text-white" style="font-size: 12px">{{ $user->name }}</span>
+                                                @endforeach
+                                            </td>
+                                            <td class="d-flex align-items-center gap-3">
+                                                <button type="button" onclick="fillShow({{ $task->id }})"
+                                                    class="border-0 bg-transparent text-primary" data-toggle="modal"
+                                                    data-target="#rightModal">
+                                                    <i class="fa-solid fa-eye m-0 fs-5"></i>
+                                                </button>
+                                                <a href="{{ route('tasks.edit', $task->id) }}"
+                                                    class="border-0 bg-transparent text-warning"><i
+                                                        class="fa-solid fa-pen-to-square m-0 fs-5"></i></a>
+                                                <button class="border-0 bg-transparent text-center text-danger "
+                                                    onclick="deleteForm({{ $task->id }},this)"><i
+                                                        class="fa-solid fa-trash m-0 fs-5"></i></button>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="8">No tasks available.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
 
                         {{-- <div class="table1 p-25 mb-30">
 
@@ -549,7 +542,7 @@
                 },
                 success: function(data) {
                     console.log('Status updated successfully:', data);
-                    $("table").load(location.href + " table ");
+                    $(".table-responsive").load(location.href + " .table-responsive ");
 
                 },
                 error: function(xhr, status, error) {
@@ -637,7 +630,7 @@
                 success: function(response) {
                     console.log('Form submitted successfully:', response);
                     $('#addTaskModal').modal('hide');
-                    $("table").load(location.href + " table ");
+                    $(".table-responsive").load(location.href + " .table-responsive ");
 
 
                     $('#addForm')[0].reset();
@@ -658,7 +651,7 @@
                     type: "DELETE",
                     url: "{{ route('tasks.destroy', ':id') }}".replace(':id', id),
                     success: function(response) {
-                        $("table").load(location.href + " table ");
+                        $(".table-responsive").load(location.href + " .table-responsive ");
                     },
                     error: function(xhr, status, error) {
                         console.log(xhr.responseText);
