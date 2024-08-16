@@ -608,19 +608,21 @@
                 url: `{{ route('tasks.show', '') }}/${id}`,
                 type: 'get',
                 success: function(data) {
-
-                    $("#taskName").text(data.task.name || '');
-                    $("#taskTitle").text(data.task.name || '');
-                    $("#projectName").text(data.task.project.name || '');
-                    $("#taskStatus").text(data.task.status || '');
-                    $("#taskPriority").text(data.task.priority || '');
-                    $("#taskAssign").html(data.task.users.map(user => user.name).join(', ') || '');
-                    $("#taskCreatedBy").text(data.task.created_by.name || '');
-                    $("#taskCreatedAt").text(formatDate(data.task.created_at) || '');
-                    $("#taskDeadline").text(formatDate(data.task.deadline) || '');
-                    $("#taskDescription").html(data.task.description || ''); // Use .html() for HTML content
+                    $("#taskName").text(data.task?.name || '');
+                    $("#taskTitle").text(data.task?.name || '');
+                    $("#projectName").text(data.task?.project?.name || '');
+                    $("#taskStatus").text(data.task?.status || '');
+                    $("#taskPriority").text(data.task?.priority || '');
+                    $("#taskAssign").html(data.task?.users?.map(user => user.name).join(', ') || '');
+                    $("#taskCreatedBy").text(data.task?.created_by?.name || '');
+                    $("#taskCreatedAt").text(data.task?.created_at ? formatDate(data.task.created_at) : '');
+                    $("#taskDeadline").text(data.task?.deadline ? formatDate(data.task.deadline) : '');
+                    $("#taskDescription").html(data.task?.description || '');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error("AJAX request failed: " + textStatus, errorThrown);
                 }
-            })
+            });
         }
 
 
