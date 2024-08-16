@@ -14,11 +14,46 @@
         </div>
         <div class="row">
             <div class="col-lg-12 mb-30">
-                <div class="card mt-30">
+                <div class="card">
                     <div class="card-header color-dark fw-500">
                         <p class="m-0">All Tasks</p>
                     </div>
                     <div class="card-body">
+                        <div class="filter">
+                            <div class="col-9">
+                                <form action="{{route("tasks.index")}}" method="GET" class="d-flex align-items-center gap-3">
+                                    <div class="mb-2 d-flex align-items-center gap-2">
+                                        <label for="status" class="">Status </label>
+                                        <select name="status" id="status" class="form-select">
+                                            <option  selected disabled>Select Status</option>
+                                            <option @selected(request("status") == "Not Started") value="Not Started">Not Started</option>
+                                            <option @selected(request("status") == "Assigned") value="Assigned">Assigned</option>
+                                            <option @selected(request("status") == "In Progress") value="In Progress">In Progress</option>
+                                            <option @selected(request("status") == "Ready For Test") value="Ready For Test">Ready For Test</option>
+                                            <option @selected(request("status") == "Done") value="Done">Done</option>
+                                        </select>
+                                    </div>
+                                    @if (auth()->user()->type == "admin")
+                                    <div class="mb-2 d-flex align-items-center gap-2">
+                                        <label for="users" class="">Users</label>
+
+                                        <select name="user" id="users" class="form-select">
+                                            <option selected disabled>Select User</option>
+                                            @foreach ($users as $user)
+                                            <option @selected(request("user") == $user->id) value="{{ $user->id }}">{{ $user->username }}</option>
+                                          @endforeach
+                                        </select>
+                                    </div>
+
+                                    @endif
+
+                                    <div class="mb-2 d-flex align-items-center gap-2">
+                                        <button type="submit" class="btn btn-primary">Filter</button>
+                                        <a href="{{route("tasks.index")}}">Clear Filters</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                         <div class="table-responsive">
                             <table id="tasksTable" class="table table-bordered">
                                 <thead>
@@ -101,9 +136,7 @@
                                             </td>
                                         </tr>
                                     @empty
-                                        <tr>
-                                            <td colspan="8">No tasks available.</td>
-                                        </tr>
+
                                     @endforelse
                                 </tbody>
                             </table>
