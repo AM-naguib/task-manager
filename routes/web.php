@@ -24,6 +24,7 @@ use App\Http\Controllers\UserController as UserController;
 |
 */
 
+route::view('editor','welcome');
 
 Route::controller(AuthController::class)->middleware('guest')->group(function () {
     Route::get("login", "loginPage")->name("login.page");

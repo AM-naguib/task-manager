@@ -1,5 +1,7 @@
 @extends('layout.app')
 @section('content')
+@viteReactRefresh
+@vite('resources/js/app.jsx')
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
@@ -365,18 +367,13 @@
                             <input autocomplete="off" type="text" id="datepicker" name="deadline"
                                 class="form-control" placeholder="Select a date">
                         </div>
+
                         <div class="col-lg-12">
-                            <div class="bg-white mb-25 rounded-xl">
-                                <div class="reply-form pt-0">
-                                    <div class="mailCompose-form-content">
-                                        <div class="form-group">
-                                            <textarea name="description" id="mail-reply-message" class="form-control-lg negoss"
-                                                placeholder="Type your message..." oninput="adjustTextAlign()"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                             <label for="deadline" class="form-label">Task Description</label>
+                            <div id="app"></div>
                         </div>
+
+                        <input type="hidden" name="description" id="description">
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
