@@ -18,13 +18,13 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
 
         $validator = Validator::make($request->all(), [
             "name" => ["required"],
             "email" => ["required", "unique:users,email", "email"],
             "username" => ["required", "unique:users,username"],
             "password" => ["required"],
+            "phone" => ["required"],
             "roles" => ["required", "array"],
         ]);
 
@@ -51,7 +51,7 @@ class UserController extends Controller
     {
         $roles = $user->getRoleNames();
         return response()->json([
-            "user" => $user->only(['id', 'name', 'email', 'username']),
+            "user" => $user->only(['id', 'name', 'email', 'username', 'phone']),
             "roles" => $roles
         ], 200);
     }
@@ -65,6 +65,7 @@ class UserController extends Controller
             "email" => "required|email|unique:users,email," . $user->id,
             "username" => "required|unique:users,username," . $user->id,
             "password" => ["nullable"],
+            "phone" => ["required"],
             "roles" => ["required", "array"],
         ]);
 
