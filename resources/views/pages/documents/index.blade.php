@@ -39,6 +39,9 @@
                                     </thead>
                                     <tbody>
                                         @forelse ($docs as $doc)
+                                            {{-- @dd($doc->document) --}}
+                                            @if ($doc)
+
                                             <tr id="doc_{{ $doc->id }}">
 
                                                 <td>{{ $loop->iteration }}</td>
@@ -54,14 +57,19 @@
 
                                                     <a href="{{ route('documents.edit', $doc->id) }}"
                                                         class="border-0 bg-transparent text-warning"><i
-                                                        class="fa-solid fa-pen-to-square m-0 fs-5"></i></a>
+                                                            class="fa-solid fa-pen-to-square m-0 fs-5"></i></a>
 
 
                                                     <button class="border-0 bg-transparent text-danger"
                                                         onclick="deleteDoc({{ $doc->id }})"><i
-                                                        class="fa-solid fa-trash m-0 fs-5"></i></button>
+                                                            class="fa-solid fa-trash m-0 fs-5"></i></button>
 
-                                                @empty
+                                                </td>
+
+                                            </tr>
+
+                                            @endif
+                                        @empty
                                         @endforelse
 
 
@@ -155,22 +163,22 @@
         function deleteDoc(id) {
             if (confirm("Are you sure you want to delete this document?")) {
 
-            $.ajax({
-                url: `{{ route('documents.destroy', '') }}/${id}`,
-                type: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(data) {
-                    $("#doc_" + id).remove();
+                $.ajax({
+                    url: `{{ route('documents.destroy', '') }}/${id}`,
+                    type: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(data) {
+                        $("#doc_" + id).remove();
 
-                },
-                error: function(data) {
-                    // Handle error here, e.g., display an error message
-                    console.error('Error deleting file:', data);
-                }
-            });
-        }
+                    },
+                    error: function(data) {
+                        // Handle error here, e.g., display an error message
+                        console.error('Error deleting file:', data);
+                    }
+                });
+            }
         }
 
 
