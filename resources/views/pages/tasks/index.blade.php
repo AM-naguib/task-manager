@@ -42,12 +42,15 @@
                                         @endphp
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td style="direction: {{ $direction }}; word-wrap: break-word;">{{ $task->name }}</td>
-                                            <td style="color: @if ($task->priority == 'High') red @elseif ($task->priority == 'Medium') #a3a300 @endif">
+                                            <td style="direction: {{ $direction }}; word-wrap: break-word;">
+                                                {{ $task->name }}</td>
+                                            <td
+                                                style="color: @if ($task->priority == 'High') red @elseif ($task->priority == 'Medium') #a3a300 @endif">
                                                 {{ $task->priority }}
                                             </td>
                                             <td>{{ $task->project->name ?? '' }}</td>
-                                            <td style="color: @if ($task->status == 'Not Started') #adadad @elseif ($task->status == 'Assigned') #f90000 @elseif ($task->status == 'Ready For Test') #fbbc00 @elseif ($task->status == 'In Progress') #1103d1 @elseif ($task->status == 'Done') #5ac100 @endif">
+                                            <td
+                                                style="color: @if ($task->status == 'Not Started') #adadad @elseif ($task->status == 'Assigned') #f90000 @elseif ($task->status == 'Ready For Test') #fbbc00 @elseif ($task->status == 'In Progress') #1103d1 @elseif ($task->status == 'Done') #5ac100 @endif">
                                                 <p class="m-0" onclick="changeStatus({{ $task->id }}, this)">
                                                     {{ $task->status }}
                                                 </p>
@@ -55,18 +58,34 @@
                                             <td>
                                                 @php
                                                     try {
-                                                        $formattedDate = \Carbon\Carbon::parse($task->deadline)->format('d-m-Y');
+                                                        $formattedDate = \Carbon\Carbon::parse($task->deadline)->format(
+                                                            'd-m-Y',
+                                                        );
                                                     } catch (\Exception $e) {
                                                         $formattedDate = $task->deadline;
                                                     }
                                                 @endphp
                                                 {{ $formattedDate }}
                                             </td>
+                                            <style>
+                                                @media (max-width: 767px) {
+
+                                                    /* Adjust breakpoint as needed */
+                                                    .mobile-margin {
+                                                        margin-bottom: 8px !important;
+                                                    }
+                                                }
+                                            </style>
                                             <td>
                                                 @foreach ($task->users as $user)
-                                                    <span class="p-1 bg-primary rounded text-white" style="font-size: 12px">{{ $user->name }}</span>
+                                                    <span class="p-1 bg-primary rounded text-white mobile-margin"
+                                                        style="font-size: 14px; display: inline-block;">
+                                                        {{ $user->username }}
+                                                    </span>
                                                 @endforeach
                                             </td>
+
+
                                             <td class="d-flex align-items-center gap-3">
                                                 <button type="button" onclick="fillShow({{ $task->id }})"
                                                     class="border-0 bg-transparent text-primary" data-toggle="modal"
