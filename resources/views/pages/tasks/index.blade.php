@@ -578,10 +578,8 @@
 
                     let userIds = data.task.user_ids || [];
 
-                    // Clear previous selections
                     $('#updateTaskModal #assign option').prop('selected', false);
 
-                    // Set new selections
                     $('#updateTaskModal #assign option').each(function() {
                         let optionValue = parseInt($(this).val());
                         if (userIds.includes(optionValue)) {
