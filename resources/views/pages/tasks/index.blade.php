@@ -16,88 +16,132 @@
         </div>
         <div class="row">
             <div class="col-lg-12 mb-30">
-                <div class="card mt-30">
+                <div class="card">
                     <div class="card-header color-dark fw-500">
                         <p class="m-0">All Tasks</p>
                     </div>
                     <div class="card-body">
-                        <table id="tasksTable" class="table table-bordered ">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Name</th>
-                                    <th>Priority</th>
-                                    <th>Project</th>
-                                    <th>Status</th>
-                                    <th>Deadline</th>
-                                    <th>Assigned Users</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($tasks as $task)
-                                    @php
-                                        // Regular expression to match Arabic letters
-                                        $arabicRegex = '/^[\x{0600}-\x{06FF}]/u';
-                                        $direction = preg_match($arabicRegex, $task->name) ? 'rtl' : 'ltr';
-                                    @endphp
+                        <div class="filter">
+                            <div class="col-9">
+                                <form action="{{route("tasks.index")}}" method="GET" class="d-flex align-items-center gap-3">
+                                    <div class="mb-2 d-flex align-items-center gap-2">
+                                        <label for="status" class="">Status </label>
+                                        <select name="status" id="status" class="form-select">
+                                            <option  selected disabled>Select Status</option>
+                                            <option @selected(request("status") == "Not Started") value="Not Started">Not Started</option>
+                                            <option @selected(request("status") == "Assigned") value="Assigned">Assigned</option>
+                                            <option @selected(request("status") == "In Progress") value="In Progress">In Progress</option>
+                                            <option @selected(request("status") == "Ready For Test") value="Ready For Test">Ready For Test</option>
+                                            <option @selected(request("status") == "Done") value="Done">Done</option>
+                                        </select>
+                                    </div>
+                                    @if (auth()->user()->type == "admin")
+                                    <div class="mb-2 d-flex align-items-center gap-2">
+                                        <label for="users" class="">Users</label>
+
+                                        <select name="user" id="users" class="form-select">
+                                            <option selected disabled>Select User</option>
+                                            @foreach ($users as $user)
+                                            <option @selected(request("user") == $user->id) value="{{ $user->id }}">{{ $user->username }}</option>
+                                          @endforeach
+                                        </select>
+                                    </div>
+
+                                    @endif
+
+                                    <div class="mb-2 d-flex align-items-center gap-2">
+                                        <button type="submit" class="btn btn-primary">Filter</button>
+                                        <a href="{{route("tasks.index")}}">Clear Filters</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="tasksTable" class="table table-bordered">
+                                <thead>
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td style="direction: {{ $direction }};">{{ $task->name }}</td>
-                                        <td
-                                            style="color: @if ($task->priority == 'High') red @elseif ($task->priority == 'Medium') #a3a300 @endif">
-                                            {{ $task->priority }}</td>
-                                        <td>{{ $task->project->name ?? '' }}</td>
-                                        <td
-                                            style="color: @if ($task->status == 'Not Started') #adadad
-                                                   @elseif ($task->status == 'Assigned') #f90000
-                                                   @elseif ($task->status == 'Ready For Test') #fbbc00
-                                                   @elseif ($task->status == 'In Progress') #1103d1
-                                                   @elseif ($task->status == 'Done') #5ac100 @endif">
-                                            <p class="m-0" onclick="changeStatus({{ $task->id }}, this)">
-                                                {{ $task->status }}</p>
-                                        </td>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                        <th>Priority</th>
+                                        <th>Project</th>
+                                        <th>Status</th>
+                                        <th>Deadline</th>
+                                        <th>Assigned Users</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($tasks as $task)
+                                        @php
+                                            // Regular expression to match Arabic letters
+                                            $arabicRegex = '/^[\x{0600}-\x{06FF}]/u';
+                                            $direction = preg_match($arabicRegex, $task->name) ? 'rtl' : 'ltr';
+                                        @endphp
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td style="direction: {{ $direction }}; word-wrap: break-word;">
+                                                {{ $task->name }}</td>
+                                            <td
+                                                style="color: @if ($task->priority == 'High') red @elseif ($task->priority == 'Medium') #a3a300 @endif">
+                                                {{ $task->priority }}
+                                            </td>
+                                            <td>{{ $task->project->name ?? '' }}</td>
+                                            <td
+                                                style="color: @if ($task->status == 'Not Started') #adadad @elseif ($task->status == 'Assigned') #f90000 @elseif ($task->status == 'Ready For Test') #fbbc00 @elseif ($task->status == 'In Progress') #1103d1 @elseif ($task->status == 'Done') #5ac100 @endif">
+                                                <p class="m-0" onclick="changeStatus({{ $task->id }}, this)">
+                                                    {{ $task->status }}
+                                                </p>
+                                            </td>
+                                            <td>
+                                                @php
+                                                    try {
+                                                        $formattedDate = \Carbon\Carbon::parse($task->deadline)->format(
+                                                            'd-m-Y',
+                                                        );
+                                                    } catch (\Exception $e) {
+                                                        $formattedDate = $task->deadline;
+                                                    }
+                                                @endphp
+                                                {{ $formattedDate }}
+                                            </td>
+                                            <style>
+                                                @media (max-width: 767px) {
 
-
-                                        <td>
-                                            @php
-                                                try {
-                                                    $formattedDate = \Carbon\Carbon::parse($task->deadline)->format(
-                                                        'd-m-Y',
-                                                    );
-                                                } catch (\Exception $e) {
-                                                    $formattedDate = $task->deadline;
+                                                    /* Adjust breakpoint as needed */
+                                                    .mobile-margin {
+                                                        margin-bottom: 8px !important;
+                                                    }
                                                 }
-                                            @endphp
-                                            {{ $formattedDate }}
-                                        </td>
-                                        <td>
-                                            @foreach ($task->users as $user)
-                                                <span class="p-1 bg-primary rounded text-white"
-                                                    style="font-size: 12px">{{ $user->name }}</span>
-                                            @endforeach
-                                        </td>
-                                        <td class="d-flex align-items-center gap-3">
-                                            <button type="button" onclick="fillShow({{ $task->id }})"
-                                                class="border-0 bg-transparent text-primary" data-toggle="modal"
-                                                data-target="#rightModal">
-                                                <i class="fa-solid fa-eye m-0 fs-5"></i>
-                                            </button>
-                                            <a href="{{ route('tasks.edit', $task->id) }}"
-                                                class="border-0 bg-transparent text-warning"><i
-                                                    class="fa-solid fa-pen-to-square m-0 fs-5"></i></a>
-                                            <button class="border-0 bg-transparent text-center text-danger "
-                                                onclick="deleteForm({{ $task->id }},this)"><i
-                                                    class="fa-solid fa-trash m-0 fs-5"></i></button>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="8">No tasks available.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                                            </style>
+                                            <td>
+                                                @foreach ($task->users as $user)
+                                                    <span class="p-1 bg-primary rounded text-white mobile-margin"
+                                                        style="font-size: 14px; display: inline-block;">
+                                                        {{ $user->username }}
+                                                    </span>
+                                                @endforeach
+                                            </td>
+
+
+                                            <td class="d-flex align-items-center gap-3">
+                                                  <a href="{{ route('tasks.view') }}?id={{ $task->id }}"
+                                                        class="btn text-primary">
+                                                        <i class="fa-solid fa-eye"></i>
+                                                     </a>
+                                                <a href="{{ route('tasks.edit', $task->id) }}"
+                                                    class="border-0 bg-transparent text-warning"><i
+                                                        class="fa-solid fa-pen-to-square m-0 fs-5"></i></a>
+                                                <button class="border-0 bg-transparent text-center text-danger "
+                                                    onclick="deleteForm({{ $task->id }},this)"><i
+                                                        class="fa-solid fa-trash m-0 fs-5"></i></button>
+                                            </td>
+                                        </tr>
+                                    @empty
+
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
 
                         {{-- <div class="table1 p-25 mb-30">
 
@@ -161,11 +205,10 @@
                                                 </td>
 
                                                 <td class="d-flex align-items-center p-4 ">
-                                                    <button type="button" onclick="fillShow({{ $task->id }})"
-                                                        class="btn text-primary" data-toggle="modal"
-                                                        data-target="#rightModal">
+                                                    <a href="{{ route('tasks.view') }}?id={{ $task->id }}"
+                                                        class="btn text-primary">
                                                         <i class="fa-solid fa-eye"></i>
-                                                    </button>
+                                                     </a>
 
                                                     <a href="{{ route('tasks.edit', $task->id) }}"
                                                         class="btn text-warning"><i class="fa-solid fa-pen-to-square"></i></a>
@@ -546,7 +589,7 @@
                 },
                 success: function(data) {
                     console.log('Status updated successfully:', data);
-                    $("table").load(location.href + " table ");
+                    $(".table-responsive").load(location.href + " .table-responsive ");
 
                 },
                 error: function(xhr, status, error) {
@@ -575,10 +618,8 @@
 
                     let userIds = data.task.user_ids || [];
 
-                    // Clear previous selections
                     $('#updateTaskModal #assign option').prop('selected', false);
 
-                    // Set new selections
                     $('#updateTaskModal #assign option').each(function() {
                         let optionValue = parseInt($(this).val());
                         if (userIds.includes(optionValue)) {
@@ -605,19 +646,21 @@
                 url: `{{ route('tasks.show', '') }}/${id}`,
                 type: 'get',
                 success: function(data) {
-
-                    $("#taskName").text(data.task.name || '');
-                    $("#taskTitle").text(data.task.name || '');
-                    $("#projectName").text(data.task.project.name || '');
-                    $("#taskStatus").text(data.task.status || '');
-                    $("#taskPriority").text(data.task.priority || '');
-                    $("#taskAssign").html(data.task.users.map(user => user.name).join(', ') || '');
-                    $("#taskCreatedBy").text(data.task.created_by.name || '');
-                    $("#taskCreatedAt").text(formatDate(data.task.created_at) || '');
-                    $("#taskDeadline").text(formatDate(data.task.deadline) || '');
-                    $("#taskDescription").html(data.task.description || ''); // Use .html() for HTML content
+                    $("#taskName").text(data.task?.name || '');
+                    $("#taskTitle").text(data.task?.name || '');
+                    $("#projectName").text(data.task?.project?.name || '');
+                    $("#taskStatus").text(data.task?.status || '');
+                    $("#taskPriority").text(data.task?.priority || '');
+                    $("#taskAssign").html(data.task?.users?.map(user => user.name).join(', ') || '');
+                    $("#taskCreatedBy").text(data.task?.created_by?.name || '');
+                    $("#taskCreatedAt").text(data.task?.created_at ? formatDate(data.task.created_at) : '');
+                    $("#taskDeadline").text(data.task?.deadline ? formatDate(data.task.deadline) : '');
+                    $("#taskDescription").html(data.task?.description || '');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error("AJAX request failed: " + textStatus, errorThrown);
                 }
-            })
+            });
         }
 
 
@@ -634,7 +677,7 @@
                 success: function(response) {
                     console.log('Form submitted successfully:', response);
                     $('#addTaskModal').modal('hide');
-                    $("table").load(location.href + " table ");
+                    $(".table-responsive").load(location.href + " .table-responsive ");
 
 
                     $('#addForm')[0].reset();
@@ -655,7 +698,7 @@
                     type: "DELETE",
                     url: "{{ route('tasks.destroy', ':id') }}".replace(':id', id),
                     success: function(response) {
-                        $("table").load(location.href + " table ");
+                        $(".table-responsive").load(location.href + " .table-responsive ");
                     },
                     error: function(xhr, status, error) {
                         console.log(xhr.responseText);

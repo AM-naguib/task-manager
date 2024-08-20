@@ -17,8 +17,10 @@ class TaskController extends Controller
         return response()->json(["message" => "Success", "tasks" => Task::all()], 200);
     }
 
-
-
+    public function view(Task $task)
+    {
+        return view('pages.tasks.view');
+    }
 
     public function store(Request $request)
     {

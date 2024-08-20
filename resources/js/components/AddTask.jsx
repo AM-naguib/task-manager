@@ -16,8 +16,7 @@ import ActionMenuList, { DefaultActionMenuRender } from '@yoopta/action-menu-lis
 import Toolbar, { DefaultToolbarRender } from '@yoopta/toolbar';
 import LinkTool, { DefaultLinkToolRender } from '@yoopta/link-tool';
 
-import { useEffect, useMemo, useRef } from 'react';
-import { withSavingToDatabaseValue } from './initValue';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const plugins = [
   Paragraph,
@@ -34,7 +33,7 @@ const plugins = [
   Embed,
   Image,
   Video,
-  File
+  File,
 ];
 
 const TOOLS = {
@@ -54,18 +53,27 @@ const TOOLS = {
 
 const MARKS = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
 
-function WithSavingToDatabase() {
+function AddTask({ taskId }) {
   const editor = useMemo(() => createYooptaEditor(), []);
   const selectionRef = useRef(null);
+  const [loading, setLoading] = useState(true);
+  const [initialValue, setInitialValue] = useState({});
+  const [editorKey, setEditorKey] = useState(Date.now()); // Key for forced re-render
 
   const fetchToServer = async (data) => {
-    //save the data in hidden input, data is json string
     document.getElementById('description').value = JSON.stringify(data);
   };
 
   const onSaveToServer = async () => {
     const editorContent = editor.getEditorValue();
     await fetchToServer(editorContent);
+    console.log('Saved task with ID:', taskId);
+  };
+
+  const deleteContent = () => {
+    setInitialValue({}); // Clear the state
+    editor.setEditorValue({}); // Clear the editor content
+    setEditorKey(Date.now()); // Force re-render by changing the key
   };
 
   function handleChange(value) {
@@ -73,36 +81,72 @@ function WithSavingToDatabase() {
   }
 
   useEffect(() => {
-      editor.on('change', handleChange);
+    editor.on('change', handleChange);
     return () => {
       editor.off('change', handleChange);
     };
   }, [editor]);
 
+  useEffect(() => {
+    const fetchTaskData = async () => {
+      if (taskId) {
+        try {
+          const response = await fetch(`/tasks/${taskId}`);
+          if (response.ok) {
+            const taskData = await response.json();
+            let description = taskData.task.description;
+            if (typeof description === 'string') {
+              try {
+                description = JSON.parse(description);
+              } catch (parseError) {
+                console.error('Error parsing description JSON:', parseError);
+                description = {};
+              }
+            }
+    
+            if (typeof description === 'object' && description !== null) {
+              setInitialValue(description);
+              editor.setEditorValue(description);
+            } else {
+              console.error('Invalid description format');
+            }
+          } else {
+            console.error('Failed to fetch task data');
+          }
+        } catch (error) {
+          console.error('Error fetching task data:', error);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+      }
+    };    
+
+    fetchTaskData();
+  }, [taskId]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div
-      ref={selectionRef}
-    >
+    <div ref={selectionRef}>
       <YooptaEditor
+        key={editorKey} // Use key to force re-render
         editor={editor}
         plugins={plugins}
         tools={TOOLS}
         marks={MARKS}
         selectionBoxRoot={selectionRef}
-        className='form-control'
-        value={{}}
+        value={initialValue}
       />
 
-        <button
-              type="button"
-              onClick={onSaveToServer}
-              className="btn btn-primary mt-4"
-        >
-          Save data
+      <button type="button" onClick={onSaveToServer} className="btn btn-primary mt-4">
+        Save data
       </button>
-
     </div>
   );
 }
 
-export default WithSavingToDatabase;
+export default AddTask;

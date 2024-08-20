@@ -22,7 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        "username"
+        "username",
+        "phone",
     ];
 
     /**
@@ -49,4 +50,5 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Task::class);
     }
+
 }
