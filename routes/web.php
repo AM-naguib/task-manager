@@ -2,16 +2,17 @@
 
 use Illuminate\Support\Facades\Route ;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\AuthController as AuthController;
 use App\Http\Controllers\HomeController as HomeController;
 use App\Http\Controllers\TaskController as TaskController;
+use App\Http\Controllers\UserController as UserController;
 use App\Http\Controllers\Api\RoleController as ApiRoleController;
 use App\Http\Controllers\Api\TaskController as ApiTaskController;
 use App\Http\Controllers\Api\UserController as ApiUserController;
 use App\Http\Controllers\ProjectController  as ProjectController;
 use App\Http\Controllers\Api\CommentController as ApiCommentController;
 use App\Http\Controllers\Api\ProjectController as ApiProjectController;
-use App\Http\Controllers\UserController as UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,16 @@ Route::middleware("auth")->group(function () {
 
 
     Route::get("users/", [UserController::class, "index"])->name("users.index");
+
+
+    Route::controller(PermissionController::class)->name("permissions.")->prefix("permissions")->group(function () {
+        Route::get("/", "index")->name("index");
+        Route::post("/", "store")->name("store");
+        Route::put("/{permission}", "update")->name("update");
+        Route::get("/{permission}", "show")->name("show");
+        Route::delete("/{permission}", "destroy")->name("destroy");
+
+    });
 
 });
 
