@@ -17,8 +17,23 @@ class DocumentController extends Controller
      */
     public function index()
     {
-        $docs = Document::get();
-        return view("pages.documents.index",compact("docs"));
+
+        $user = auth()->user();
+        if ($user->type == "admin") {
+            $docs = Document::get();
+        } else {
+            $userId = $user->id;
+            $docs = Project::whereHas('tasks', function ($query) use ($userId) {
+                $query->whereHas('users', function ($query) use ($userId) {
+                    $query->where('user_id', $userId);
+                });
+            })
+            ->with('document')
+            ->get()
+            ->pluck('document');
+        }
+
+        return view("pages.documents.index", compact("docs"));
     }
 
     /**
@@ -137,9 +152,9 @@ class DocumentController extends Controller
     public function destroy(Document $document)
     {
 
-        try{
-            if(!empty($document->documenFiles)){
-                foreach ($document->documenFiles as $file){
+        try {
+            if (!empty($document->documenFiles)) {
+                foreach ($document->documenFiles as $file) {
                     Storage::delete($file->file_url);
                     $file->delete();
                 }
@@ -147,7 +162,7 @@ class DocumentController extends Controller
 
             $document->delete();
             return response()->json(["message" => "Document deleted"], 200);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
 
             return response()->json(["message" => $e->getMessage()], 500);
         }

@@ -59,14 +59,13 @@
 
                                                 <td class="d-flex  align-items-center gap-3">
                                                     <button id="btn-edit" onclick="insertForm('edit',{{ $user->id }})"
-                                                        type="button" class="border-0 bg-transparent text-info" data-bs-toggle="modal"
-                                                        data-bs-target="#staticBackdrop">
-                                                        <i
-                                                    class="fa-solid fa-pen-to-square m-0 fs-5"></i>
+                                                        type="button" class="border-0 bg-transparent text-info"
+                                                        data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                        <i class="fa-solid fa-pen-to-square m-0 fs-5"></i>
                                                     </button>
                                                     <button class="border-0 bg-transparent text-danger"
                                                         onclick="deleteForm({{ $user->id }})"><i
-                                                        class="fa-solid fa-trash m-0 fs-5"></i></button>
+                                                            class="fa-solid fa-trash m-0 fs-5"></i></button>
                                                 @empty
                                         @endforelse
                                     </tbody>
@@ -139,6 +138,10 @@
                             <label for="username" class="form-label required">Username</label>
                             <input autocomplete="off"type="text" class="form-control" id="username" name="username" value="${data.user.username}" required autocomplete="off">
                         </div>
+                         <div class="mb-3">
+                            <label for="phone" class="form-label required">Phone</label>
+                            <input autocomplete="off"type="text" class="form-control" id="phone" name="phone" required value="${data.user.phone ?? ''}" >
+                        </div>
                         <div class="mb-3">
                             <label for="email" class="form-label required">email</label>
                             <input autocomplete="off"type="text" class="form-control" id="email" name="email" value="${data.user.email}" required autocomplete="off">
@@ -176,6 +179,10 @@
                         <div class="mb-3">
                             <label for="username" class="form-label required">Username</label>
                             <input autocomplete="off"type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                                                <div class="mb-3">
+                            <label for="phone" class="form-label required">Phone</label>
+                            <input autocomplete="off"type="text" class="form-control" id="phone" name="phone" required placeholder="Ex.01000000000">
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label required">email</label>

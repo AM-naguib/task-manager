@@ -35,7 +35,6 @@ class RolesPermissionsSeeder extends Seeder
         "user-create",
         "user-edit",
         "user-delete",
-
     ];
     public function run(): void
     {
@@ -57,6 +56,5 @@ class RolesPermissionsSeeder extends Seeder
         $role2->syncPermissions($permissions);
         $user->assignRole([$role->id]);
         $user->assignRole([$role2->id]);
-
     }
 }

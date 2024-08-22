@@ -17,12 +17,13 @@ class TaskController extends Controller
         return response()->json(["message" => "Success", "tasks" => Task::all()], 200);
     }
 
-
-
+    public function view(Task $task)
+    {
+        return view('pages.tasks.view');
+    }
 
     public function store(Request $request)
     {
-        // dd($request->all());
         $request["created_by"]= auth()->user()->id;
         $validator = Validator::make($request->all(), [
             "name" => "required",

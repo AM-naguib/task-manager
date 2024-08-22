@@ -9,5 +9,24 @@
         "axios": "^1.6.4",
         "laravel-vite-plugin": "^1.0.0",
         "vite": "^5.0.0"
+    },
+    "dependencies": {
+        "@vitejs/plugin-react": "^4.3.1",
+        "@yoopta/action-menu-list": "^4.6.9",
+        "@yoopta/blockquote": "^4.6.9",
+        "@yoopta/callout": "^4.6.9",
+        "@yoopta/code": "^4.6.9",
+        "@yoopta/editor": "^4.6.9",
+        "@yoopta/embed": "^4.6.9",
+        "@yoopta/file": "^4.6.9",
+        "@yoopta/headings": "^4.6.9",
+        "@yoopta/image": "^4.6.9",
+        "@yoopta/link": "^4.6.9",
+        "@yoopta/link-tool": "^4.6.9",
+        "@yoopta/lists": "^4.6.9",
+        "@yoopta/marks": "^4.6.9",
+        "@yoopta/paragraph": "^4.6.9",
+        "@yoopta/toolbar": "^4.6.9",
+        "@yoopta/video": "^4.6.9"
     }
 }
