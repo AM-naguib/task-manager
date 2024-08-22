@@ -24,7 +24,6 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
         $request["created_by"]= auth()->user()->id;
         $validator = Validator::make($request->all(), [
             "name" => "required",

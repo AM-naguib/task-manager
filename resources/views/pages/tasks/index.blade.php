@@ -124,10 +124,12 @@
 
 
                                             <td class="d-flex align-items-center gap-3">
-                                                  <a href="{{ route('tasks.view') }}?id={{ $task->id }}"
+                                            
+                                                     <a href="{{ route('tasks.view') }}?id={{ $task->id }}"
                                                         class="btn text-primary">
                                                         <i class="fa-solid fa-eye"></i>
                                                      </a>
+                                            
                                                 <a href="{{ route('tasks.edit', $task->id) }}"
                                                     class="border-0 bg-transparent text-warning"><i
                                                         class="fa-solid fa-pen-to-square m-0 fs-5"></i></a>
