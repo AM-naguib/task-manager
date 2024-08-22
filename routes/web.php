@@ -25,6 +25,7 @@ use App\Http\Controllers\Api\ProjectController as ApiProjectController;
 |
 */
 
+route::view('editor','welcome');
 
 Route::controller(AuthController::class)->middleware('guest')->group(function () {
     Route::get("login", "loginPage")->name("login.page");
@@ -83,6 +84,7 @@ Route::middleware("auth")->group(function () {
         Route::post("/", "store")->name("store");
         Route::put("/{task}", "update")->name("update");
         Route::delete("/{task}", "destroy")->name("destroy");
+        Route::get("/view", "view")->name("view");
         Route::get("/{task}", "show")->name("show");
     });
 
